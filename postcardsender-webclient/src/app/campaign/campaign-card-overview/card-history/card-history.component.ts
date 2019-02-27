@@ -21,7 +21,6 @@ export class CardHistoryComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('onInit hist')
     this.postcardService.getCardHistory(this.id).subscribe(next => this.cardHistories = next);
   }
 
