@@ -1,0 +1,308 @@
+<h4 *ngIf="newCampaign">Neue Kampagne anlegen</h4>
+<h4 *ngIf="!newCampaign">Kampagne bearbeiten</h4>
+<div class="row">
+  <div class="col-md-12">
+    <form id="campaign_form" class="form-horizontal" (ngSubmit)="campaignForm.form.valid && handleSubmit(campaignForm)"
+          #campaignForm="ngForm">
+
+      <div class="card shadow">
+        <div class="card-header">
+          <span style="font-size: 1.5em">Basisdaten</span>
+        </div>
+        <div class="card-body">
+
+          <div class="form-group row">
+            <div class="col-md-6">
+              <label for="desc" class="col-form-label" translate>Kampagne</label>
+              <input class="form-control" type="text" name="desc" id="desc" [(ngModel)]="campaign.desc"
+                     #desc="ngModel" maxlength="200" required autofocus="">
+              <div *ngIf="campaignForm.submitted && !desc.valid" class="alert-danger">Kampagnenname benötigt</div>
+            </div>
+            <div class="col-md-4">
+              <label for="campaignKey" class="col-form-label" translate>Campaign Key</label>
+              <input class="form-control" type="text" name="campaignKey" id="campaignKey" [(ngModel)]="campaign.key"
+                     #key="ngModel" maxlength="100" placeholder="Provided by Post CH AG" required>
+              <div *ngIf="campaignForm.submitted && !key.valid" class="alert-danger">Kampagnenkey benötigt</div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+
+            <div class="col-md-3">
+              <label for="validFrom" class="col-form-label" translate>Gültig von</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="dd.mm.yyyy" name="validFrom" id="validFrom"
+                       [(ngModel)]="datePickerModelValidFrom" ngbDatepicker #d1="ngbDatepicker" #validFrom="ngModel" required>
+                <div *ngIf="campaignForm.submitted && !validFrom.valid" class="alert-danger">Datum benötigt</div>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary fa fa-calendar" (click)="d1.toggle()"
+                          type="button"></button>
+                </div>
+              </div>
+            </div>
+
+
+            <div class="col-md-3">
+              <label for="validTo" class="col-form-label" translate>Gültig bis</label>
+              <div class="input-group">
+                <input class="form-control" placeholder="dd.mm.yyyy" name="validTo" id="validTo"
+                       [(ngModel)]="datePickerModelValidTo" ngbDatepicker #d2="ngbDatepicker" #validTo="ngModel" required>
+                <div *ngIf="campaignForm.submitted && !validTo.valid" class="alert-danger">Datum benötigt</div>
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary fa fa-calendar" (click)="d2.toggle()"
+                          type="button"></button>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-5">
+              <label for="limit" class="col-form-label" translate>Begrenzung Anzahl Postkarten pro IP und Tag</label>
+              <input class="form-control" type="number" name="limit" id="limit" [(ngModel)]="campaign.maxCards"
+                     #limit="ngModel" required>
+              <div *ngIf="campaignForm.submitted && !limit.valid" class="alert-danger">Limit benötigt</div>
+            </div>
+          </div>
+          <div class="form-group row">
+
+            <div class="col-md-3">
+              <div translate>Postkarten Motive</div>
+            </div>
+
+
+            <div class="col-md-4">
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="form-control">
+                    <input class="radio" type="radio" name="imgPredef" id="imgPredef" [value]="'PREDEFINED'"
+                           [(ngModel)]="campaign.imgType">
+                  </div>
+
+                </div>
+
+                <label class="input-group-text" for="imgPredef">Vorgegebene Bilder</label>
+
+              </div>
+
+
+            </div>
+            <div class="col-md-4">
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="form-control">
+                    <input class="radio" type="radio" name="imgUpload" id="imgUpload" [value]="'UPLOAD'"
+                           [(ngModel)]="campaign.imgType">
+                  </div>
+                </div>
+                <label class="input-group-text" for="imgUpload">Upload eigenes Bild durch User</label>
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group row">
+
+            <div class="col-md-3">
+              <div translate>Branding Typ</div>
+            </div>
+
+
+            <div class="col-md-3">
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="form-control">
+                    <input class="radio" type="radio" name="typeText" id="typeText" [value]="'TEXT'"
+                           [(ngModel)]="campaign.brandType">
+                  </div>
+                </div>
+                <label class="input-group-text" for="typeText">Text</label>
+              </div>
+
+            </div>
+            <div class="col-md-3">
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="form-control">
+                    <input class="radio" type="radio" name="typeImage" id="typeImage" [value]="'IMAGE'"
+                           [(ngModel)]="campaign.brandType">
+                  </div>
+                </div>
+                <label class="input-group-text" for="typeImage">Bild</label>
+              </div>
+
+            </div>
+            <div class="col-md-3">
+
+              <div class="input-group">
+                <div class="input-group-prepend">
+                  <div class="form-control">
+                    <input class="radio" type="radio" name="typeQr" id="typeQr" [value]="'QR'"
+                           [(ngModel)]="campaign.brandType">
+                  </div>
+                </div>
+                <label class="input-group-text" for="typeQr">QR-Code</label>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+      <div *ngIf="campaign.id !== null">
+
+        <div *ngIf="campaign.imgType === 'PREDEFINED'" class="card shadow">
+          <div class="card-header">
+            <span style="font-size: 1.5em">Bildauswahl hinzufügen</span>
+            <h6>(Empfohlene Bildgrösse 1819 x 1311 pixels)</h6>
+          </div>
+          <div class="card-body">
+
+            <div class="form-group row">
+
+              <app-imageuploader [showCrop]="true" (uploadedFile)="addImage($event)"></app-imageuploader>
+
+
+            </div>
+            <div class="form-group row">
+
+
+              <div *ngFor="let img of images, let i = index" class="col-md-4">
+                <div class="card">
+                  <img class="card-img-top" name="img" id="img_{{i}}" [src]="img.file">
+                  <div class="card-body">
+                    <button (click)="removeImage(img.id); $event.preventDefault();"
+                            class="btn btn-secondary fa fa-trash"></button>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow">
+          <div class="card-header">
+            <span style="font-size: 1.5em">Briefmarke</span>
+            <h6>(Empfohlene Bildgrösse 343 x 248 pixels)</h6>
+          </div>
+          <div class="card-body">
+
+            <div class="form-group row">
+              <app-imageuploader [showCrop]="false" (uploadedFile)="setStamp($event)"></app-imageuploader>
+
+            </div>
+
+            <div class="form-group row">
+
+
+              <div class="col-md-4">
+                <div *ngIf="!!stamp" class="card">
+                  <img class="card-img-top" name="stamp" id="stamp" [src]="stamp">
+                  <div class="card-body">
+                    <button (click)="removeStamp(); $event.preventDefault();"
+                            class="btn btn-secondary fa fa-trash"></button>
+                  </div>
+                </div>
+                <div *ngIf="!stamp" translate>Keine Briefmarke definiert</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card shadow">
+          <div class="card-header">
+            <span style="font-size: 1.5em">Aufdruck Werbebereich</span>
+            <h6 *ngIf="(campaign.brandType === 'IMAGE')">(Empfohlene Bildgrösse 777 x 295 pixels)</h6>
+          </div>
+          <div class="card-body">
+
+
+            <div *ngIf="(campaign.brandType === 'IMAGE')" class="form-group">
+              <div class="row">
+                <app-imageuploader [showCrop]="false"
+                                   (uploadedFile)="campaign.brandImgId = $event; showBrandImg();"></app-imageuploader>
+
+              </div>
+
+              <div class="form-group row">
+
+                <div class="col-md-4">
+                  <div *ngIf="!!brandImg" class="card">
+                    <img class="card-img-top" name="brandImg" id="brandImg" [src]="brandImg">
+                    <div class="card-body">
+                      <button (click)="campaign.brandImgId = null; brandImg = null; $event.preventDefault();"
+                              class="btn btn-secondary fa fa-trash"></button>
+                    </div>
+                  </div>
+                  <div *ngIf="!brandImg" translate>Kein Bild definiert</div>
+                </div>
+              </div>
+
+            </div>
+
+            <div *ngIf="(campaign.brandType === 'QR')" class="form-group">
+              <div class="col-md-12">
+                <label for="brandingQr" class="control-label" translate>Code QR-Code</label>
+                <textarea type="text" rows="4" class="form-control" name="brandingQr" id="brandingQr" maxlength="100"
+                          [(ngModel)]="campaign.brandQr"></textarea>
+              </div>
+            </div>
+
+            <div *ngIf="(campaign.brandType === 'TEXT')" class="form-group">
+              <div class="col-md-12">
+                <label for="brandingText" class="control-label" translate>Text</label>
+                <textarea type="text" rows="4" class="form-control" name="brandingText" id="brandingText" maxlength="250"
+                          [(ngModel)]="campaign.brandText"></textarea>
+              </div>
+            </div>
+
+
+            <div *ngIf="!(campaign.brandType === 'IMAGE')" class="form-group">
+              <div class="row">
+                <div class="col-md-3">
+                  <label for="brandingTextColor" class="control-label" translate>Textfarbe</label>
+
+                  <input class="form-control" type="text" name="brandingTextColor" id="brandingTextColor"
+                         [(ngModel)]="campaign.brandTextColor"
+                         [style.background]="campaign.brandTextColor"
+                         [(colorPicker)]="campaign.brandTextColor"/>
+                </div>
+                <div class="col-md-3">
+                  <label for="brandingBlockColor" class="control-label" translate>Block Hintergrundfarbe</label>
+
+                  <input class="form-control" type="text" name="brandingBlockColor" id="brandingBlockColor"
+                         [(ngModel)]="campaign.brandBlockColor"
+                         [style.background]="campaign.brandBlockColor"
+                         [(colorPicker)]="campaign.brandBlockColor"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col-md-3">
+          <button id="save_button" type="submit" class="btn btn-primary" role="button">
+            <span translate>Speichern</span>
+          </button>
+        </div>
+
+        <div class="col-md-3">
+          <button id="cancel_button" class="btn btn-secondary" (click)="goBack()">
+            <span translate>Zurück</span>
+          </button>
+        </div>
+      </div>
+
+    </form>
+
+
+  </div>
+</div>

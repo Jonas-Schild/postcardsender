@@ -1,0 +1,12 @@
+<div class="carousel">
+  <ngb-carousel *ngIf="images">
+
+    <ng-template *ngFor="let image of images" ngbSlide>
+      <!-- <img [src]="image.file" [height]="1819" [width]="1311"> -->
+      <img [src]="image.file">
+      <div class="carousel-caption">
+        <button class="btn btn-primary" (click)="chooseImage(image.id)">Als Vorderseite wählen</button>
+      </div>
+    </ng-template>
+  </ngb-carousel>
+</div>

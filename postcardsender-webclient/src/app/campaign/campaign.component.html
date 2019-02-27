@@ -1,0 +1,16 @@
+<app-navigation-bar *ngIf="!editMode"></app-navigation-bar>
+
+<div *ngIf="!editMode" class="row">
+  <div class="col-md-12">
+    <app-campaign-choose [adminMode]="true" (selectedCampaign)="showReport()"
+                         (edit)="editCampaign()"></app-campaign-choose>
+  </div>
+  <div class="col-md-3">
+    <button class="btn btn-success fa fa-plus" (click)="createNewCampaign()"> Neue Kampagne</button>
+  </div>
+</div>
+<div *ngIf="!!editMode" class="row">
+  <div class="col-md-12">
+    <app-campaign-edit [newCampaign]="newCampaign" (back)="backFromEdit()"></app-campaign-edit>
+  </div>
+</div>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <parent>
+    <artifactId>postcardsender</artifactId>
+    <groupId>ch.schildj.postcardsender</groupId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+
+  <artifactId>postcardsender-webclient</artifactId>
+  <packaging>jar</packaging>
+
+
+  <properties>
+    <destDir>${project.build.outputDirectory}/META-INF/resources/webjars/${project.artifactId}</destDir>
+  </properties>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>Step 1: npm install</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>${node.build.generate-resources.phase}</phase>
+            <configuration>
+              <executable>${npm.executable}</executable>
+              <workingDirectory>${basedir}</workingDirectory>
+              <arguments>
+                <argument>--no-color</argument>
+                <argument>install</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>Step 2: npm run build</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>${node.build.generate-resources.phase}</phase>
+            <configuration>
+              <executable>${npm.executable}</executable>
+              <workingDirectory>${basedir}</workingDirectory>
+              <arguments>
+                <argument>run</argument>
+                <argument>build</argument>
+                <argument>--</argument>
+                <argument>--base-href</argument>
+                <argument>/postcardsender-web/</argument>
+              </arguments>
+            </configuration>
+          </execution>
+        </executions>
+
+
+      </plugin>
+    </plugins>
+    <resources>
+      <resource>
+        <directory>${project.basedir}/dist/postcardsender-webclient</directory>
+        <targetPath>${destDir}</targetPath>
+      </resource>
+      <resource>
+        <directory>${project.basedir}/fragments</directory>
+        <targetPath>${destDir}/fragments</targetPath>
+      </resource>
+    </resources>
+  </build>
+
+  <profiles>
+    <profile>
+      <id>platform-windows</id>
+      <activation>
+        <os>
+          <family>windows</family>
+        </os>
+      </activation>
+      <properties>
+        <npm.executable>npm.cmd</npm.executable>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>platform-unix</id>
+      <activation>
+        <os>
+          <family>unix</family>
+        </os>
+      </activation>
+      <properties>
+        <npm.executable>npm</npm.executable>
+      </properties>
+    </profile>
+  </profiles>
+</project>

@@ -1,0 +1,64 @@
+<label class="btn btn-default">
+  <input type="file" accept="image/x-png, image/jpeg" (change)="selectFile($event)">
+  <div *ngIf="loading" class="spinner-border" role="status">
+    <span class="sr-only">Loading...</span>
+  </div>
+</label>
+
+<div class="row">
+  <div *ngIf="showCrop && imageChangedEvent" class="col-md-7">
+    <button class="btn btn-secondary fa fa-undo" (click)="rotateLeft();  $event.preventDefault();">nach links drehen
+    </button>
+    <button class="btn btn-secondary fa fa-repeat" (click)="rotateRight();  $event.preventDefault();">nach rechts drehen
+    </button>
+
+    <div>
+      <image-cropper
+        [imageChangedEvent]="imageChangedEvent"
+        [maintainAspectRatio]="true"
+        [aspectRatio]="16 / 12"
+        [resizeToWidth]="1819"
+        [cropperMinWidth]="128"
+        [onlyScaleDown]="true"
+        [roundCropper]="false"
+        format="png"
+        outputType="file"
+        (imageCropped)="imageCropped($event)"
+        (imageLoaded)="imageLoaded()"
+        (cropperReady)="cropperReady()"
+        (loadImageFailed)="loadImageFailed()"
+        [style.display]="showCropper ? null : 'none'"
+      ></image-cropper>
+    </div>
+
+  </div>
+
+  <div *ngIf="imagePreview" class="col-md-5">
+    <div class="card">
+      <div class="card-header">
+        <div>gewählter Bildausschnitt</div>
+      </div>
+      <div class="card-body">
+        <img class="card-img-top" [src]="imagePreview"/>
+      </div>
+      <div class="card-footer">
+        <div class="row">
+          <button class="btn btn-primary" [disabled]="!selectedFiles" (click)="upload();  $event.preventDefault();">
+            Hochladen & verwenden
+          </button>
+        </div>
+        <div class="row"></div>
+        <div *ngIf="currentFileUpload" class="progress">
+          <div class="progress-bar progress-bar-info progress-bar-striped" role="progressbar"
+               attr.aria-valuenow="{{progress.percentage}}"
+               aria-valuemin="0" aria-valuemax="100" [ngStyle]="{width:progress.percentage+'%'}">
+            {{progress.percentage}}%
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+

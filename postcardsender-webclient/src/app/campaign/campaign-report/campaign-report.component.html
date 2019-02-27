@@ -1,0 +1,15 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="jumbotron jumbotron-fluid jumbotron-small">
+      <div class="col-md-12">
+        <h5>Statistik der an die Post übermittelten Postkarten</h5>
+        <div *ngIf="!statistic" class="alert alert-info">Statistiken konnten nicht von der Post abgefragt werden.</div>
+        <div *ngIf="!!statistic">
+          <div class="col-md-4"><span translate>Quote: </span>{{statistic.quota}}</div>
+          <div class="col-md-4"><span translate>Versendet: </span>{{statistic.sendPostcards}}</div>
+          <div class="col-md-4"><span translate>freies Kontingent: </span>{{statistic.freeToSendPostcards}}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

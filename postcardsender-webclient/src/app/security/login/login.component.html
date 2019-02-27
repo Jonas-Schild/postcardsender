@@ -1,0 +1,40 @@
+<div class="card shadow">
+    <div class="card-header">
+        <span>Login</span>
+    </div>
+    <div class="card-body">
+
+        <div class="row">
+            <div class="col-lg-6">
+                <form id="login_form" class="form-horizontal" (ngSubmit)="handleSubmit(loginForm)" #loginForm="ngForm">
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="username" class="col-lg-4 control-label" data-translate="basic.login.username">Username</label>
+                            <div class="col-lg-6">
+                                <input class="form-control" type="text" name="username" id="username" ngModel placeholder="Username"  #un="ngModel" required autofocus="">
+                                <div *ngIf="loginForm.submitted && !un.valid" class="alert-danger">Username benötigt</div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password" class="col-lg-4 control-label ng-scope" data-translate="basic.login.password">Password</label>
+                            <div class="col-lg-6">
+                                <input class="form-control" type="password" id="password" name="password" ngModel placeholder="Password" #pw="ngModel" required>
+                              <div *ngIf="loginForm.submitted && !pw.valid" class="alert-danger">Passwort benötigt</div>
+                            </div>
+                        </div>
+                    </fieldset>
+
+                    <p id="statusText" *ngIf="status" style="color:#a94442;"><span translate>{{status}}</span><span *ngIf="statusText" translate>: {{statusText}}</span></p>
+                    <div>
+                        <button id="login_form_button" type="submit" class="btn btn-primary" role="button">
+                            <span>Login</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
