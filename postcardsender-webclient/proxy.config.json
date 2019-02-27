@@ -1,0 +1,14 @@
+[
+  {
+    "context": [
+      "/postcardsender-web/api",
+      "/postcardsender-web/auth"
+    ],
+    "target": "http://localhost:8080/postcardsender-web/",
+    "secure": false,
+    "logLevel": "debug",
+    "pathRewrite": {
+      "^/postcardsender-web/": ""
+    }
+  }
+]

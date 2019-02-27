@@ -1,0 +1,47 @@
+<div class="col-md-12" *ngIf="creationStep === 1">
+  <h2>Karte wählen</h2>
+  <div *ngIf="!!campaign && campaign.imgType === 'PREDEFINED'">
+    <app-imagepicker [images]="images" (selectedImage)="selectImage($event)"></app-imagepicker>
+  </div>
+  <div *ngIf="!!campaign && campaign.imgType === 'UPLOAD'">
+    <app-imageuploader [showCrop]="true" (uploadedFile)="selectImage($event)"></app-imageuploader>
+  </div>
+</div>
+<div class="col-md-12" *ngIf="creationStep === 2">
+  <h2>Text eingeben</h2>
+  <form name="form" (ngSubmit)="f.form.valid && updateText()" #f="ngForm" accept-charset="ISO-8859-1">
+    <div class="form-group">
+      <!-- <label for="text">Text</label> -->
+      <textarea type="text" rows="8" class="form-control" id="text" name="text" [(ngModel)]="postcard.text"
+                #text="ngModel" required></textarea>
+      <div *ngIf="f.submitted && !text.valid" class="alert-danger">Postkartentext muss eingegeben werden</div>
+    </div>
+    <div class="form-group">
+      <button class="btn btn-outline-primary" type="submit">Weiter</button>
+    </div>
+  </form>
+</div>
+<div class="col-md-12" *ngIf="creationStep === 3">
+  <app-address [address]="recipient" [addresstyp]="'Empfänger'"
+               (save)="updateRecipient($event)"></app-address>
+</div>
+<div class="col-md-12" *ngIf="creationStep === 4">
+  <app-address [address]="sender" [addresstyp]="'Absender'"
+               (save)="updateSender($event)"></app-address>
+</div>
+<div class="col-md-12" *ngIf="creationStep === 5">
+  <h2>Bestätigen</h2>
+  <app-overview (approve)="approvePostcard()" (callStep)="callStepFromOverview($event)"></app-overview>
+  <button *ngIf="calledFromCampaign" class="btn btn-default" (click)="backToCampaign()">Zurück zur Postkartenliste</button>
+</div>
+<div class="col-md-12" *ngIf="creationStep === 6">
+  <h1>Postkarte wurde verschickt</h1>
+  <div class="row">
+    <i class="fa fa-check-circle"
+       style="font-size: 5em; margin: 1em; color: green"></i>
+  </div>
+  <div class="row">
+    <button class="btn btn-primary" (click)="newCard()">Neue Karte erstellen</button>
+  </div>
+</div>
+

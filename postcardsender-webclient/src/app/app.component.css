@@ -1,0 +1,20 @@
+.container {
+  background-color: lightgrey;
+}
+
+.header {
+  background-image: url(/assets/postcardsender_logo.jpg);
+  background-size: cover;
+  background-position: center;
+  width: 100%;
+}
+
+.footer {
+  height: 1em;
+  margin-top: 4px;
+  padding: 1px;
+}
+
+
+
+
