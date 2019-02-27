@@ -1,5 +1,38 @@
-Build and start postcardsender
+## Table of Contents
+
+- [Goal](#goal)
+- [Postcard-API explorer](#postcard-api-explorer)
+- [Build and start postcardsender](#build-and-start-postcardsender)
+- [Configure settings](#configure-settings)
+- [Start client on separate port for testing an debugging Angular](#start-client-on-separate-port-for-testing-an-debugging-angular)
+- [Create our own webclient](#create-our-own-webclient)
+
 ------------------------------------
+##Goal
+This project is realized as a part of my masters thesis.
+
+The Swiss Post offers their business customers an API to create postcards.
+
+**With this project I would like to simplify the integration of the API in your own project by providing an example which can be used and adopted.**
+
+Further information about the postcard API, provided by Swiss Post, you will find [here](https://www.post.ch/de/geschaeftlich/prozesse-optimieren/zwischen-ihnen-und-der-post/postkarten-api) 
+or the technical specification at: [Postcard API](https://developer.post.ch/en/technical-specifications-of-postcard-api)
+
+##Postcard-API explorer
+
+To get familiar with the possible requests and the following responses of the Postcard API I provided a html-file:
+[PostcardAPICommunicator.html](https://github.com/Jonas-Schild/postcardsender/blob/master/PostcardAPICommunicator.html)
+
+You just have to open this file in your browser.
+To be able to communicate with the Postcard API, you have to disable Cross Origin Request Security (CORS) in your browser, to allow external content.
+
+```
+Start Chrome with disabled web-security:
+chrome.exe --user-data-dir="C:/Chrome dev session" --disable-web-security
+```
+
+
+##Build and start postcardsender
 
 Install java, maven and node, if not present
 
@@ -19,7 +52,7 @@ Manage your campaign on [http://localhost:8080/postcardsender-web/ui/campaign](h
     
 Create postcards on on [http://localhost:8080/postcardsender-web](http://localhost:8080/postcardsender-web)    
     
-##Configure Settings
+##Configure settings
 
 You will find the a separate application.properties-file for every environment at ..\postcardsender-web\src\main\resources\config\ where you can configure your settings.
 
@@ -31,7 +64,7 @@ To be able to communicate with the [Postcard API](https://developer.post.ch/en/t
 Please also change all other passwords contained in the properties-files.
 
 
-##Start Client on separate port for testing an debugging Angular
+##Start client on separate port for testing an debugging Angular
 
 Run the client on [http://localhost:4200](http://localhost:4200/postcardsender-web)
 
