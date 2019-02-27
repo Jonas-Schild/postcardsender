@@ -1,0 +1,20 @@
+**/target/*
+**/logs/*
+!.mvn/wrapper/maven-wrapper.jar
+
+**/.project
+**/.classpath
+**/.settings
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+
+
+###Angular###
+*/dist/**
+*/node_modules/**
+*/npm/**
