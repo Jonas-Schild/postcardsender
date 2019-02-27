@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <springProperty scope="context" name="HOST" source="ch.schildj.host" defaultValue="localhost"/>
+    <springProperty scope="context" name="ENV" source="ch.schildj.environment"/>
+    <springProperty scope="context" name="INSTANCE" source="ch.schildj.instance"/>
+    <springProperty scope="context" name="LOGGING_DIR" source="ch.schildj.logging.dir"/>
+
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ISO8601} ${HOST} ${ENV} ${INSTANCE} postcardsender %p %c
+                - %t %X{username} %X{clientHost} - %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="loggingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_DIR}/postcardsender.log
+        </file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGGING_DIR}/postcardsender.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601} ${HOST} ${ENV} ${INSTANCE} postcardsender %p %c
+                - %t %X{username} %X{clientHost} - %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="alarmingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_DIR}/postcardsender-alarming.log
+        </file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGGING_DIR}/postcardsender-alarming.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601} ${HOST} ${ENV} ${INSTANCE}postcardsender %p %c
+                - %t %X{username} %X{clientHost} - %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="auditingFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_DIR}/postcardsender-auditing.log
+        </file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGGING_DIR}/postcardsender-auditing.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>30</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601}; Application;postcardsender; User: %X{username}; Client: %X{clientHost}; Environment:
+                ${ENV}; Instance: ${INSTANCE}; Message: %m%n
+            </pattern>
+        </encoder>
+    </appender>
+
+    <appender name="performanceFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_DIR}/postcardsender-performance.log
+        </file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGGING_DIR}/postcardsender-performance.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="deliveryTraceFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_DIR}/postcardsender-delivery.log
+        </file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGGING_DIR}/postcardsender-delivery.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>10</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601} %p %c{1} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <appender name="evaluateNextServiceTraceFileAppender" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOGGING_DIR}/postcardsender-nextservices.log
+        </file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!-- daily rollover -->
+            <fileNamePattern>${LOGGING_DIR}/postcardsender-nextservices.%d{yyyy-MM-dd}.log
+            </fileNamePattern>
+            <maxHistory>5</maxHistory>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601} %p %c{1} - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- The Perf4J logger. Note that org.perf4j.Timinglogger is the value of
+        the org.perf4j.StopWatch.DEFAULT_LOGGER_NAME constant. Also, note that additivity
+        is set to false, which is usually what is desired - this means that timing
+        statements will only be sent to this logger and NOT to upstream loggers. -->
+    <logger name="org.perf4j.TimingLogger" level="INFO" additivity="false">
+        <appender-ref ref="performanceFileAppender"/>
+    </logger>
+
+    <logger name="performance" level="INFO" additivity="false">
+        <appender-ref ref="performanceFileAppender"/>
+    </logger>
+
+    <logger name="alarming" level="ERROR">
+        <appender-ref ref="alarmingFileAppender"/>
+    </logger>
+
+    <logger name="auditing" level="INFO">
+        <appender-ref ref="auditingFileAppender"/>
+    </logger>
+
+    <logger name="org.springframework" level="WARN"/>
+
+    <logger name="org.springframework.transaction" level="WARN"/>
+
+    <logger name="org.springframework.jdbc" level="WARN"/>
+
+    <logger name="org.springframework.orm.jpa" level="WARN"/>
+
+    <logger name="org.springframework.web" level="WARN"/>
+
+    <logger name="org.springframework.security" level="WARN"/>
+
+    <logger name="org.apache" level="WARN"/>
+
+    <logger name="org.hibernate" level="WARN"/>
+
+    <!-- Set to TRACE for logging SQL statement parameters -->
+    <logger name="org.hibernate.type" level="WARN"/>
+
+    <logger name="httpclient" level="ERROR"/>
+
+    <logger name="org.apache.http" level="ERROR"/>
+
+    <logger name="com.mangofactory" level="ERROR"/>
+
+    <logger name="com.github.ziplet" level="ERROR"/>
+
+    <logger name="ch.schildj.common" level="WARN"/>
+
+    <logger name="springfox" level="INFO"/>
+
+    <logger name="org.thymeleaf" level="INFO"/>
+
+    <logger name="ch.schildj.postcardsender" level="INFO"/>
+
+    <logger name="ch.schildj.postcardsender.web" level="INFO"/>
+
+    <logger name="ch.schildj.postcardsender.web.feature" level="INFO"/>
+
+    <logger name="ch.schildj.postcardsender.process" level="INFO"/>
+
+    <logger name="ch.schildj.postcardsender.domain" level="INFO"/>
+
+    <logger name="org.hibernate.engine" level="ERROR">
+        <appender-ref ref="auditingFileAppender"/>
+    </logger>
+
+
+    <root level="INFO">
+        <appender-ref ref="consoleAppender"/>
+        <appender-ref ref="loggingFileAppender"/>
+    </root>
+
+
+</configuration>

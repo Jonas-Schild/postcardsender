@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<configuration>
+
+    <appender name="consoleAppender" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{ABSOLUTE} %5p %t %c:%L - %m%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="WARN"/>
+
+    <logger name="org.springframework.transaction" level="WARN"/>
+
+    <logger name="org.springframework.jdbc" level="WARN"/>
+
+    <logger name="org.springframework.orm.jpa" level="WARN"/>
+
+    <logger name="org.springframework.web" level="WARN"/>
+
+    <logger name="org.springframework.security" level="WARN"/>
+
+    <logger name="org.apache" level="WARN"/>
+
+    <logger name="org.hibernate" level="WARN"/>
+
+    <!-- Set to TRACE for logging SQL statement parameters -->
+    <logger name="org.hibernate.type" level="WARN"/>
+
+    <logger name="httpclient" level="ERROR"/>
+
+    <logger name="org.apache.http" level="ERROR"/>
+
+    <logger name="com.mangofactory" level="ERROR"/>
+
+    <logger name="com.github.ziplet" level="WARN"/>
+
+    <logger name="springfox" level="INFO"/>
+
+    <logger name="org.thymeleaf" level="INFO"/>
+
+
+    <root level="DEBUG">
+        <appender-ref ref="consoleAppender"/>
+    </root>
+
+</configuration>
