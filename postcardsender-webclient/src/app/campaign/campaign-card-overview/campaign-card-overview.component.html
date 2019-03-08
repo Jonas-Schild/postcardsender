@@ -1,156 +1,166 @@
-<app-navigation-bar></app-navigation-bar>
-<div *ngIf="!showPostcard && campaign.id && !showPostcardHist">
-  <app-campaign-report></app-campaign-report>
-  <div class="card">
-    <div class="card-header">
-      <h2>Suche erstellte Postkarten</h2>
-      <form name="form" (ngSubmit)="f.form.valid && loadPostcards()" #f="ngForm" novalidate>
+<div class="card shadow">
+  <div class="card-header">
+    <div class="row">
+      <div class="info-admin">Sie befinden sich in der Verwaltungsansicht</div>
+    </div>
+    <app-navigation-bar *ngIf="!showPostcard"></app-navigation-bar>
+  </div>
+  <div class="card-body">
+    <div *ngIf="!showPostcard && campaign.id && !showPostcardHist">
+      <app-campaign-report></app-campaign-report>
+      <div class="card">
+        <div class="card-header">
+          <h2>Suche erstellte Postkarten</h2>
+          <form name="form" (ngSubmit)="f.form.valid && loadPostcards()" #f="ngForm" novalidate>
 
-        <div class="form-group row">
-          <div class="col-md-3">
-            <label for="from">Von</label>
-            <input type="text" class="form-control" id="from" name="from" [(ngModel)]="search.from"
-                   #fN="ngModel" placeholder="DD.MM.YYYY HH:MI:SS"
-                   pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}[ ](0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}"/>
-            <div *ngIf="f.submitted && !fN.valid" class="alert-danger">Format DD.MM.YYYY HH:MI:SS</div>
-          </div>
-          <div class="col-md-3">
-            <label for="till">bis</label>
-            <input type="text" class="form-control" id="till" name="till" [(ngModel)]="search.till"
-                   #lN="ngModel" placeholder="DD.MM.YYYY HH:MI:SS"
-                   pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}[ ](0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}"/>
-            <div *ngIf="f.submitted && !lN.valid" class="alert-danger">Format DD.MM.YYYY HH:MI:SS</div>
-          </div>
-          <div class="col-md-3">
-            <label for="state">Status</label>
-            <select id="state" name="state" class="form-control" [(ngModel)]="search.state">
-              <option [value]="undefined">alle</option>
-              <option [value]="'OPEN'" translate>Offen</option>
-              <option [value]="'APPROVED'" translate>Verschickt</option>
-            </select>
-          </div>
-          <div class="col-md-3">
-            <label for="transmission">Status Übermittlung</label>
-            <select id="transmission" name="transmission" class="form-control"
-                    [(ngModel)]="search.transmissionState">
-              <option [value]="undefined">alle</option>
-              <option [value]="'OPEN'" translate>Offen</option>
-              <option [value]="'OK'" translate>Ok</option>
-              <option [value]="'WARNING'" translate>Warnung</option>
-              <option [value]="'ERROR'" translate>Fehler</option>
-            </select>
-          </div>
+            <div class="form-group row">
+              <div class="col-md-3">
+                <label for="from">Von</label>
+                <input type="text" class="form-control" id="from" name="from" [(ngModel)]="search.from"
+                       #fN="ngModel" placeholder="DD.MM.YYYY HH:MI:SS"
+                       pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}[ ](0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}"/>
+                <div *ngIf="f.submitted && !fN.valid" class="alert-danger">Format DD.MM.YYYY HH:MI:SS</div>
+              </div>
+              <div class="col-md-3">
+                <label for="till">bis</label>
+                <input type="text" class="form-control" id="till" name="till" [(ngModel)]="search.till"
+                       #lN="ngModel" placeholder="DD.MM.YYYY HH:MI:SS"
+                       pattern="(0[1-9]|1[0-9]|2[0-9]|3[01]).(0[1-9]|1[012]).[0-9]{4}[ ](0[0-9]|1[0-9]|2[0-3])(:[0-5][0-9]){2}"/>
+                <div *ngIf="f.submitted && !lN.valid" class="alert-danger">Format DD.MM.YYYY HH:MI:SS</div>
+              </div>
+              <div class="col-md-3">
+                <label for="state">Status</label>
+                <select id="state" name="state" class="form-control" [(ngModel)]="search.state">
+                  <option [value]="undefined">alle</option>
+                  <option [value]="'OPEN'" translate>Offen</option>
+                  <option [value]="'APPROVED'" translate>Verschickt</option>
+                </select>
+              </div>
+              <div class="col-md-3">
+                <label for="transmission">Status Übermittlung</label>
+                <select id="transmission" name="transmission" class="form-control"
+                        [(ngModel)]="search.transmissionState">
+                  <option [value]="undefined">alle</option>
+                  <option [value]="'OPEN'" translate>Offen</option>
+                  <option [value]="'OK'" translate>Ok</option>
+                  <option [value]="'WARNING'" translate>Warnung</option>
+                  <option [value]="'ERROR'" translate>Fehler</option>
+                </select>
+              </div>
+
+            </div>
+            <div class="form-group">
+              <div class="col-md3">
+                <button type="submit" class="btn btn-outline-primary">Suchen</button>
+              </div>
+              <div class="col-md3">
+                <button [disabled]="f.form.invalid" class="btn btn-outline-primary float-right"
+                        (click)="downloadReport()">
+                  Exportieren
+                </button>
+                <div *ngIf="loading" class="spinner-border" role="status">
+                  <span class="sr-only">Loading...</span>
+                </div>
+              </div>
+            </div>
+          </form>
 
         </div>
-        <div class="form-group">
-          <div class="col-md3">
-            <button type="submit" class="btn btn-outline-primary">Suchen</button>
-          </div>
-          <div class="col-md3">
-            <button [disabled]="f.form.invalid" class="btn btn-outline-primary float-right" (click)="downloadReport()">
-              Exportieren
-            </button>
-            <div *ngIf="loading" class="spinner-border" role="status">
-              <span class="sr-only">Loading...</span>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <ngx-datatable id="tag-abr-table"
+                             class="bootstrap"
+                             [loadingIndicator]="!initializeFinished"
+                             [columnMode]="'flex'"
+                             [rows]="postcardList"
+                             [headerHeight]="50"
+                             [rowHeight]="'auto'"
+                             [footerHeight]="50"
+                             [sortType]="'multi'"
+                             [externalPaging]="true"
+                             [count]="collectionSize"
+                             (page)="setPage($event)">
+
+                <ngx-datatable-column [prop]="'id'" [flexGrow]="2" [sortable]="false" [resizeable]="false">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate></span>
+                  </ng-template>
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <button class="btn no-padding" (click)="goToOverviewWithCard(row)"><i
+                      class="fa fa-edit"></i>
+                    </button>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column [prop]="'mdate'" [flexGrow]="4" [sortable]="true" [resizeable]="false">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate>Datum</span>
+                  </ng-template>
+                  <ng-template ngx-datatable-cell-template let-value="value">
+                    {{ value | date: 'dd.MM.yyyy HH:mm:ss'}}
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [prop]="'state'" [flexGrow]="4" [sortable]="true" [resizeable]="false">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate>Status</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [prop]="'transmissionState'" [flexGrow]="5" [sortable]="true"
+                                      [resizeable]="false">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate>Übermittlung</span>
+                  </ng-template>
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    {{value}}
+                    <button class="btn no-padding float-right" (click)="showHist(row.id)"><i
+                      class="fa fa-info-circle"></i>
+                    </button>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [prop]="'text'" [flexGrow]="10" [sortable]="false" [resizeable]="true">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate>Text</span>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [prop]="'senderLastname'" [flexGrow]="8" [sortable]="false" [resizeable]="true">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate>Absender</span>
+                  </ng-template>
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <div>{{row.senderFirstname}} {{row.senderLastname}}</div>
+                    <div>{{row.senderStreet}} {{row.senderHousenr}} </div>
+                    <div>{{row.senderZip}} {{row.senderCity}}</div>
+                  </ng-template>
+                </ngx-datatable-column>
+                <ngx-datatable-column [prop]="'recipientLastname'" [flexGrow]="8" [sortable]="false"
+                                      [resizeable]="true">
+                  <ng-template ngx-datatable-header-template>
+                    <span translate>Empfänger</span>
+                  </ng-template>
+                  <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
+                    <div>{{row.recipientFirstname}} {{row.recipientLastname}}</div>
+                    <div>{{row.recipientStreet}} {{row.recipientHousenr}} </div>
+                    <div>{{row.recipientZip}} {{row.recipientCity}}</div>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+              </ngx-datatable>
             </div>
           </div>
         </div>
-      </form>
 
-    </div>
-    <div class="card-body">
-      <div class="row">
-        <div class="col-md-12">
-          <ngx-datatable id="tag-abr-table"
-                         class="bootstrap"
-                         [loadingIndicator]="!initializeFinished"
-                         [columnMode]="'flex'"
-                         [rows]="postcardList"
-                         [headerHeight]="50"
-                         [rowHeight]="'auto'"
-                         [footerHeight]="50"
-                         [sortType]="'multi'"
-                         [externalPaging]="true"
-                         [count]="collectionSize"
-                         (page)="setPage($event)">
-
-            <ngx-datatable-column [prop]="'id'" [flexGrow]="2" [sortable]="false" [resizeable]="false">
-              <ng-template ngx-datatable-header-template>
-                <span translate></span>
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <button class="btn no-padding" (click)="goToOverviewWithCard(row)"><i
-                  class="fa fa-edit"></i>
-                </button>
-              </ng-template>
-            </ngx-datatable-column>
-
-
-            <ngx-datatable-column [prop]="'mdate'" [flexGrow]="4" [sortable]="true" [resizeable]="false">
-              <ng-template ngx-datatable-header-template>
-                <span translate>Datum</span>
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-value="value">
-                {{ value | date: 'dd.MM.yyyy HH:mm:ss'}}
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column [prop]="'state'" [flexGrow]="4" [sortable]="true" [resizeable]="false">
-              <ng-template ngx-datatable-header-template>
-                <span translate>Status</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column [prop]="'transmissionState'" [flexGrow]="4" [sortable]="true" [resizeable]="false">
-              <ng-template ngx-datatable-header-template>
-                <span translate>Übermittlung</span>
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                {{value}}
-                <button class="btn no-padding float-right" (click)="showHist(row.id)"><i
-                  class="fa fa-info-circle"></i>
-                </button>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column [prop]="'text'" [flexGrow]="10" [sortable]="false" [resizeable]="true">
-              <ng-template ngx-datatable-header-template>
-                <span translate>Text</span>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column [prop]="'senderLastname'" [flexGrow]="8" [sortable]="false" [resizeable]="true">
-              <ng-template ngx-datatable-header-template>
-                <span translate>Absender</span>
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <div>{{row.senderFirstname}} {{row.senderLastname}}</div>
-                <div>{{row.senderStreet}} {{row.senderHousenr}} </div>
-                <div>{{row.senderZip}} {{row.senderCity}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-            <ngx-datatable-column [prop]="'recipientLastname'" [flexGrow]="8" [sortable]="false" [resizeable]="true">
-              <ng-template ngx-datatable-header-template>
-                <span translate>Empfänger</span>
-              </ng-template>
-              <ng-template ngx-datatable-cell-template let-row="row" let-value="value">
-                <div>{{row.recipientFirstname}} {{row.recipientLastname}}</div>
-                <div>{{row.recipientStreet}} {{row.recipientHousenr}} </div>
-                <div>{{row.recipientZip}} {{row.recipientCity}}</div>
-              </ng-template>
-            </ngx-datatable-column>
-
-
-          </ngx-datatable>
-        </div>
       </div>
     </div>
-
-  </div>
-</div>
-<div *ngIf="showPostcard" class="row">
-  <div class="col-md-12">
-    <app-postcard [calledFromCampaign]="true" (action)="backFromPostcard()"></app-postcard>
-  </div>
-</div>
-<div *ngIf="showPostcardHist" class="row">
-  <div class="col-md-12">
-    <app-card-history [id]="postCardId" (backFromHist)="backFromHist()"></app-card-history>
+    <div *ngIf="showPostcard" class="row">
+      <div class="col-md-12">
+        <app-postcard [calledFromCampaign]="true" (action)="backFromPostcard()"></app-postcard>
+      </div>
+    </div>
+    <div *ngIf="showPostcardHist">
+      <app-card-history [id]="postCardId" (backFromHist)="backFromHist()"></app-card-history>
+    </div>
   </div>
 </div>

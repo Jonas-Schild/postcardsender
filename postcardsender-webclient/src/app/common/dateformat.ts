@@ -1,4 +1,7 @@
 /*copied from https://github.com/ng-bootstrap/ng-bootstrap/issues/2072*/
+/**
+ * Dateformat DD.MM.YYYY
+ */
 import {NgbDateParserFormatter, NgbDateStruct} from '@ng-bootstrap/ng-bootstrap';
 import {Injectable} from '@angular/core';
 

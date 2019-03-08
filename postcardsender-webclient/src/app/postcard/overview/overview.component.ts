@@ -29,14 +29,12 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('load overview');
     this.approveLoading = false;
     this.stateService.currentPostcard.subscribe(
       p => {
         this.postcard = p;
         if (p.frontImageId) {
           this.imageService.getImageFile(p.frontImageId).subscribe(image => {
-            console.log('image loaded');
             const reader = new FileReader();
             reader.addEventListener('load', () => {
               this.imageFile = reader.result;

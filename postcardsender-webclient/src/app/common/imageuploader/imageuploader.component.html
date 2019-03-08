@@ -3,6 +3,9 @@
   <div *ngIf="loading" class="spinner-border" role="status">
     <span class="sr-only">Loading...</span>
   </div>
+  <div *ngIf="fileTooBig" class="alert alert-danger" role="alert">
+    Bild zu gross, max. 6 MB erlaubt!
+  </div>
 </label>
 
 <div class="row">

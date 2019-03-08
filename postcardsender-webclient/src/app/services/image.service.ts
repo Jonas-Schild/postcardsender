@@ -10,13 +10,9 @@ export class ImageService {
   constructor(private http: HttpClient) {
   }
 
-  // public getImageFile(id: number): Observable<Blob> {
-  //   return this.http
-  //     .get(`${IMAGE}/${id}`, {observe: 'response', responseType: 'blob'})
-  //     .map((res: any) => res._body)
-  //     .catch(error => this.errorService.handleError(error));
-  // }
-
+  /**
+   * Load an image-file with an id
+   */
   public getImageFile(id: number): Observable<Blob> {
     const headers = new HttpHeaders({
       'Content-Type': 'application/json',
@@ -25,11 +21,9 @@ export class ImageService {
     return this.http.get<Blob>(`${IMAGE}/${id}`, {headers: headers, responseType: 'blob' as 'json'});
   }
 
-
-  // public getImageFile(id: number): Observable<Blob> {
-  //   return this.http.get<Blob>(`${IMAGE}/${id}`, {responseType: 'blob' as 'json'});
-  // }
-
+  /**
+   * Save image-file
+   */
   saveImage(file: File): Observable<HttpEvent<{}>> {
     const formdata: FormData = new FormData();
 

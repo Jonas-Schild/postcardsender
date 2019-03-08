@@ -27,6 +27,7 @@ export class ImageuploaderComponent implements OnInit {
   showCropper = false;
   imagePreview: any = '';
   loading = false;
+  fileTooBig = false;
 
 
   constructor(private imageService: ImageService) {
@@ -36,16 +37,28 @@ export class ImageuploaderComponent implements OnInit {
     this.selectedFiles = undefined;
   }
 
+  /**
+   * Proceed image-upload
+   */
   selectFile(event) {
     this.loading = true;
+    this.fileTooBig = false;
     this.selectedFiles = event.target.files;
-    this.progress = {percentage: 0};
-    this.imageChangedEvent = event;
-    if (!this.showCrop) {
-      this.showPreview(this.selectedFiles.item(0));
+    if (this.selectedFiles.item(0).size > 6291456) {
+      this.fileTooBig = true;
+      this.loading = false;
+    } else {
+      this.progress = {percentage: 0};
+      this.imageChangedEvent = event;
+      if (!this.showCrop) {
+        this.showPreview(this.selectedFiles.item(0));
+      }
     }
   }
 
+  /**
+   * upload image and allow to crop if desired
+   */
   upload() {
     this.progress.percentage = 0;
 
@@ -69,8 +82,6 @@ export class ImageuploaderComponent implements OnInit {
     this.croppedImage = '';
     this.imageChangedEvent = '';
   }
-
-  //
 
   showPreview(imageFile) {
     console.log('showPreview');

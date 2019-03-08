@@ -121,7 +121,6 @@
 
     <logger name="org.hibernate" level="WARN"/>
 
-    <!-- Set to TRACE for logging SQL statement parameters -->
     <logger name="org.hibernate.type" level="WARN"/>
 
     <logger name="httpclient" level="ERROR"/>
@@ -141,8 +140,6 @@
     <logger name="ch.schildj.postcardsender" level="DEBUG"/>
 
     <logger name="ch.schildj.postcardsender.web" level="DEBUG"/>
-
-    <logger name="ch.schildj.postcardsender.web.feature" level="INFO"/>
 
     <logger name="ch.schildj.postcardsender.process" level="DEBUG"/>
 

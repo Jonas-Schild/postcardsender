@@ -29,7 +29,13 @@ export class CampaignChooseComponent implements OnInit {
       this.campaignService.getAllCampaigns().subscribe(next => this.campaigns = next);
     } else {
       // Show only active Campaigns
-      this.campaignService.getAllCurrentcampaigns().subscribe(next => this.campaigns = next);
+      this.campaignService.getAllCurrentcampaigns().subscribe(next => {
+        this.campaigns = next;
+        if (this.campaigns && this.campaigns.length === 1) {
+          // If only one is active, choose this one direcly.
+          this.selectCampaign(this.campaigns[0]);
+        }
+      });
     }
   }
 

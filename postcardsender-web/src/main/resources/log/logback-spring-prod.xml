@@ -156,8 +156,6 @@
 
     <logger name="ch.schildj.postcardsender.web" level="INFO"/>
 
-    <logger name="ch.schildj.postcardsender.web.feature" level="INFO"/>
-
     <logger name="ch.schildj.postcardsender.process" level="INFO"/>
 
     <logger name="ch.schildj.postcardsender.domain" level="INFO"/>

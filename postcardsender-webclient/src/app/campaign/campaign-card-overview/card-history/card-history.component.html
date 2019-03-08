@@ -4,18 +4,18 @@
       <div class="col-md-4">
         <span translate>Request am</span> {{ hist.requestDate | date: 'dd.MM.yyyy HH:mm:ss'}}
       </div>
-      <div class="col-md-8">
+      <div class="col-md-8 text-wrap">
         {{hist.request}}
       </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
+      <div class="col-md-12 text-wrap">
         {{hist.respHttpCode}} {{hist.respHttpError}}
       </div>
     </div>
     <div *ngIf="hist.respMessageDTOS.length > 0">
       <div *ngFor="let msg of hist.respMessageDTOS" class="row">
-        <div class="col-md-12">
+        <div class="col-md-12 text-wrap">
           {{msg.type}}: {{msg.text}}
         </div>
       </div>

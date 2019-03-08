@@ -115,7 +115,7 @@
 
     <logger name="org.springframework.web" level="WARN"/>
 
-    <logger name="org.springframework.security" level="DEBUG"/>
+    <logger name="org.springframework.security" level="WARN"/>
 
     <logger name="org.apache" level="WARN"/>
 
@@ -140,8 +140,6 @@
     <logger name="ch.schildj.postcardsender" level="DEBUG"/>
 
     <logger name="ch.schildj.postcardsender.web" level="DEBUG"/>
-
-    <logger name="ch.schildj.postcardsender.web.feature" level="INFO"/>
 
     <logger name="ch.schildj.postcardsender.process" level="DEBUG"/>
 

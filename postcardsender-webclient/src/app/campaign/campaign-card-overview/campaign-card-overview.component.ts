@@ -58,6 +58,9 @@ export class CampaignCardOverviewComponent implements OnInit {
 
   }
 
+  /**
+   * Load requested Postcards
+   */
   loadPostcards() {
     this.initializeFinished = false;
     this.showPostcard = false;

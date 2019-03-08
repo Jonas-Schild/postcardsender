@@ -80,7 +80,6 @@ export class PostcardComponent implements OnInit {
         )
         ;
 
-
         // get images
         if (camp.imgType === 'PREDEFINED') {
           this.campaignService.getImages(camp.id).subscribe(imageIds => {

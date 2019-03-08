@@ -17,3 +17,7 @@
 
   cursor: pointer;
 }
+
+.card {
+  margin-bottom: 0.5em;
+}

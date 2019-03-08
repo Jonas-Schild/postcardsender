@@ -45,9 +45,10 @@ export class CampaignEditComponent implements OnInit {
     });
   }
 
+  /**
+   * Handle Form Submit
+   */
   handleSubmit(campaignForm: NgForm) {
-    // this.userService.login(loginForm.value.username, loginForm.value.password);
-    console.log('submited');
     this.campaign.validTo = new Date(this.datePickerModelValidTo.year,
       this.datePickerModelValidTo.month - 1, this.datePickerModelValidTo.day, 12);
     this.campaign.validFrom = new Date(this.datePickerModelValidFrom.year,
@@ -88,7 +89,9 @@ export class CampaignEditComponent implements OnInit {
     return ngbDateStruct;
   }
 
-
+  /**
+   * Display postcard-images defined for this campaign
+   */
   public showImages() {
     if (this.campaign.id != null) {
       this.campaignService.getImages(this.campaign.id).subscribe(imageIds => {
@@ -107,6 +110,9 @@ export class CampaignEditComponent implements OnInit {
     }
   }
 
+  /**
+   * Display stamp-image defined for this campaign
+   */
   public showStamp() {
     if (this.campaign.stampImgId != null) {
       this.imageService.getImageFile(this.campaign.stampImgId).subscribe(image => {
@@ -121,6 +127,9 @@ export class CampaignEditComponent implements OnInit {
     }
   }
 
+  /**
+   * Display branding-image defined for this campaign
+   */
   public showBrandImg() {
     if (this.campaign.brandImgId != null) {
       this.imageService.getImageFile(this.campaign.brandImgId).subscribe(image => {
