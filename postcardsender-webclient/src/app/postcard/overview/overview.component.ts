@@ -29,18 +29,21 @@ export class OverviewComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('load overview');
     this.approveLoading = false;
     this.stateService.currentPostcard.subscribe(
       p => {
         this.postcard = p;
-        this.imageService.getImageFile(p.frontImageId).subscribe(image => {
-          // this.images.push({'id': id, 'file': image});
-          const reader = new FileReader();
-          reader.addEventListener('load', () => {
-            this.imageFile = reader.result;
-          }, false);
-          reader.readAsDataURL(image);
-        });
+        if (p.frontImageId) {
+          this.imageService.getImageFile(p.frontImageId).subscribe(image => {
+            console.log('image loaded');
+            const reader = new FileReader();
+            reader.addEventListener('load', () => {
+              this.imageFile = reader.result;
+            }, false);
+            reader.readAsDataURL(image);
+          });
+        }
       }
     );
   }

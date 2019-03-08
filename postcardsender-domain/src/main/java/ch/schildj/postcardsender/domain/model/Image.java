@@ -16,6 +16,20 @@ import java.util.List;
         @AttributeOverride(name = "mdate", column = @Column(name = Image.COLUMN_PREFIX + "MDATE")),
         @AttributeOverride(name = "cdate", column = @Column(name = Image.COLUMN_PREFIX + "CDATE"))
 })
+@NamedNativeQueries({
+        @NamedNativeQuery(
+                name = "getUnusedImages",
+                query = "SELECT * " +
+                        "FROM IMAGE " +
+                        "WHERE IMG_CDATE < ?1 " +
+                        "AND NOT EXISTS " +
+                        "(SELECT 1 from POSTCARD WHERE PC_FRONT_IMG_ID = IMG_ID) " +
+                        "AND NOT EXISTS " +
+                        "(SELECT 1 from CAMPAIGN WHERE CAMP_BRAND_IMG_ID = IMG_ID OR CAMP_STAMP_IMG_ID = IMG_ID) " +
+                        "AND NOT EXISTS " +
+                        "(SELECT 1 from CAMP_IMAGE_SET WHERE CIS_IMG_ID = IMG_ID) ",
+                resultClass = Image.class
+        )})
 public class Image extends AbstractAuditableIdModel implements Serializable {
     protected static final String COLUMN_PREFIX = "IMG_";
 
@@ -80,5 +94,13 @@ public class Image extends AbstractAuditableIdModel implements Serializable {
 
     public void setFile(Blob file) {
         this.file = file;
+    }
+
+    public List<Campaign> getCampaignBrandingList() {
+        return campaignBrandingList;
+    }
+
+    public void setCampaignBrandingList(List<Campaign> campaignBrandingList) {
+        this.campaignBrandingList = campaignBrandingList;
     }
 }

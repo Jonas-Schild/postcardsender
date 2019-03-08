@@ -201,13 +201,21 @@
 
 
         @-webkit-keyframes spin {
-            0% { -webkit-transform: rotate(0deg); }
-            100% { -webkit-transform: rotate(360deg); }
+            0% {
+                -webkit-transform: rotate(0deg);
+            }
+            100% {
+                -webkit-transform: rotate(360deg);
+            }
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
     </style>
@@ -217,297 +225,301 @@
 
 <body>
 <div class="pagecontent">
-<div class="c1">
-    <header>
-        <form id="credentialsForm">
-            <h1 class="title1">PostCardSender - Requests kennenlernen</h1>
-            <h6>Hinweis: Funktioniert nur, wenn im Browser Cross Origin Request Security (CORS) abgestellt ist</h6>
+    <div class="c1">
+        <header>
+            <form id="credentialsForm">
+                <h1 class="title1">PostCardSender - Requests kennenlernen</h1>
+                <h6>Hinweis: Funktioniert nur, wenn im Browser Cross Origin Request Security (CORS) abgestellt ist</h6>
+                <fieldset>
+                    <legend>Zugangsdaten (von Post CH AG zur Verfügung gestellt)</legend>
+                    <div>
+                        <input type="radio" name="environment" value="int" checked>Integration
+                        <input type="radio" name="environment" value="prod">Produktion
+                    </div>
+                    <div class="pair">
+                        <label for="identifier">Client Identifier:</label>
+                        <input name="identifier" id="identifier" class="credfield" required>
+                    </div>
+                    <div class="pair">
+                        <label for="secret">Client Secret:</label>
+                        <input name="secret" id="secret" class="credfield" type="password" required>
+                    </div>
+                    <div class="pair">
+                        <label for="campaign">Kampagne:</label>
+                        <input name="campaign" id="campaign" class="credfield" required>
+                    </div>
+                    <!-- <button onclick="getOauth2Token()">go</button> -->
+                </fieldset>
+            </form>
+        </header>
+
+        <div class="container">
+
             <fieldset>
-                <legend>Zugangsdaten (von Post CH AG zur Verfügung gestellt)</legend>
-                <div>
-                    <input type="radio" name="environment" value="int" checked>Integration
-                    <input type="radio" name="environment" value="prod">Produktion
+                <legend>letzter Request</legend>
+                <div class="lastrequest">
+                    <div class="request">
+                        <div id="lastRequest"></div>
+                        <div id="requestOK" style="background-color: green; display: none;">
+                            <i class="material-icons">
+                                check_circle_outline
+                            </i>
+                            <div class="biggertext">OK</div>
+                        </div>
+                        <div id="requestNOK" style="background-color: indianred; display: none">
+                            <i class="material-icons">
+                                highlight_off
+                            </i>
+                            <div class="biggertext">NOK</div>
+                        </div>
+                        <div id="requestWARN" style="background-color: orange; display: none">
+                            <i class="material-icons">
+                                report_problem
+                            </i>
+                            <div class="biggertext">WARN</div>
+                        </div>
+                        <div id="requestAnswer"></div>
+                    </div>
+                    <div id="requestDetail" style="display: none">
+
+                        <fieldset>
+                            <legend for="outlineRequest">Request</legend>
+                            <div id="outlineRequest"></div>
+                        </fieldset>
+                        <fieldset>
+                            <legend for="outlineResponse">Response</legend>
+                            <div id="outlineResponse"></div>
+                        </fieldset>
+                        aktueller Kartenkey:
+                        <div id="cardKey">(leer)</div>
+                    </div>
                 </div>
-                <div class="pair">
-                    <label for="identifier">Client Identifier:</label>
-                    <input name="identifier" id="identifier" class="credfield" required>
-                </div>
-                <div class="pair">
-                    <label for="secret">Client Secret:</label>
-                    <input name="secret" id="secret" class="credfield" type="password" required>
-                </div>
-                <div class="pair">
-                    <label for="campaign">Kampagne:</label>
-                    <input name="campaign" id="campaign" class="credfield" required>
-                </div>
-                <!-- <button onclick="getOauth2Token()">go</button> -->
             </fieldset>
-        </form>
-    </header>
 
-    <div class="container">
 
-        <fieldset>
-            <legend>letzter Request</legend>
-            <div class="lastrequest">
-            <div class="request">
-            <div id="lastRequest"></div>
-            <div id="requestOK" style="background-color: green; display: none;">
-                <i class="material-icons">
-                    check_circle_outline
-                </i>
-                <div class="biggertext">OK</div>
-            </div>
-            <div id="requestNOK" style="background-color: indianred; display: none">
-                <i class="material-icons">
-                    highlight_off
-                </i>
-                <div class="biggertext">NOK</div>
-            </div>
-            <div id="requestWARN" style="background-color: orange; display: none">
-                <i class="material-icons">
-                    report_problem
-                </i>
-                <div class="biggertext">WARN</div>
-            </div>
-            <div id="requestAnswer"></div>
-            </div>
-            <div id="requestDetail" style="display: none">
-
-                <fieldset>
-                    <legend for="outlineRequest">Request</legend>
-                    <div id="outlineRequest"></div>
+            <div class="centerblock">
+                <button id="newCard" class="button">Neue Karte erstellen</button>
+                <button id="clear" onclick="location.reload();" class="button">Karte und Eingaben löschen</button>
+                <button id="previewFront" class="button onlywithcard">Kartenvorschau vorne</button>
+                <button id="previewBack" class="button onlywithcard">Kartenvorschau hinten</button>
+                <button id="approve" class="button onlywithcard">Karte abschicken</button>
                 </fieldset>
-                <fieldset>
-                    <legend for="outlineResponse">Response</legend>
-                    <div id="outlineResponse"></div>
-                </fieldset>
-                aktueller Kartenkey: <div id="cardKey">(leer)</div>
+
+
             </div>
+
+            <div id="loader" class="loader"></div>
+            <div class="container">
+
+                <main>
+                    <h2 class="title2">Postkarteninhalte</h2>
+
+                    <div class="modal" id="previewModal">
+                        <!-- Modal content -->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span class="close">&times;</span>
+                                <h1 class="title1">Vorschau</h1>
+                            </div>
+                            <div class="modal-body">
+                                <img id="imagePreview" src="" alt="preview" class="img-large">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="postcard-items">
+                        <fieldset>
+                            <legend>Absender</legend>
+                            <form id="senderForm">
+                                <div class="pair">
+                                    <label for="senderLastname">Nachname:</label>
+                                    <input name="lastname" id="senderLastname" class="addressfield"/>
+                                </div>
+                                <div class="pair">
+                                    <label for="senderFirstname">Vorname:</label>
+                                    <input name="firstname" id="senderFirstname" class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
+                                    <label for="senderStreet">Strasse:</label>
+                                    <input name="street" id="senderStreet" class="addressfield">
+                                </div>
+                                <div class="pair">
+                                    <label for="senderHousenr">Hausnr:</label>
+                                    <input name="houseNr" id="senderHousenr" class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
+                                    <label for="senderZip">PLZ:</label>
+                                    <input name="zip" id="senderZip" class="addressfield">
+                                </div>
+                                <div class="pair">
+                                    <label for="senderCity">Ort:</label>
+                                    <input name="city" id="senderCity" class="addressfield">
+                                </div>
+                                <br/>
+                                <input type="submit" value="Update >>" class="button onlywithcard"/>
+                            </form>
+                        </fieldset>
+                        <fieldset>
+                            <legend>Empfänger</legend>
+                            <form id="recipientForm">
+                                <div class="pair">
+                                    <label for="recipientTitle">Titel:</label>
+                                    <input name="title" id="recipientTitle" class="addressfield">
+                                </div>
+
+                                <br/>
+                                <div class="pair">
+                                    <label for="recipientLastname">Nachname:</label>
+                                    <input name="lastname" id="recipientLastname"
+                                           class="addressfield">
+                                </div>
+                                <div class="pair">
+                                    <label for="recipientFirstname">Vorname:</label>
+                                    <input name="firstname" id="recipientFirstname"
+                                           class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
+                                    <label for="recipientCompany">Firma:</label>
+                                    <input name="company" id="recipientCompany" class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
+                                    <label for="recipientStreet">Strasse:</label>
+                                    <input name="street" id="recipientStreet" class="addressfield">
+                                </div>
+                                <div class="pair">
+                                    <label for="recipientHousenr">Hausnr:</label>
+                                    <input name="houseNr" id="recipientHousenr" class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
+                                    <label for="recipientZip">PLZ:</label>
+                                    <input name="zip" id="recipientZip" class="addressfield">
+                                </div>
+                                <div class="pair">
+                                    <label for="recipientCity">Ort:</label>
+                                    <input name="city" id="recipientCity" class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
+                                    <label for="recipientPObox">Postfach:</label>
+                                    <input name="poBox" id="recipientPObox" class="addressfield">
+                                </div>
+                                <br/>
+                                <input type="submit" value="Update >>" class="button onlywithcard"/>
+                            </form>
+                        </fieldset>
+                    </div>
+                    <div class="postcard-items">
+                        <fieldset>
+                            <legend>Postkartentext</legend>
+                            <form id="senderTextForm">
+                                <textarea name="senderText" id="senderText" style="width:100%;height:200px"></textarea>
+                                <br/>
+                                <input type="submit" value="Update >>" class="button onlywithcard"/>
+
+                            </form>
+                        </fieldset>
+                        <fieldset style="flex-grow: 1">
+                            <legend>Frontbild</legend>
+                            <form id="imageForm">
+                                <input name="image" id="frontImage" type="file" accept=".png, .jpg"
+                                       onchange="readURL(this,'frontImageUp');">
+                                <br/>
+                                <img id="frontImageUp" src="https://via.placeholder.com/180?text=dein+Frontbild"
+                                     alt="dein Frontbild" class="img-small">
+                                <br/>
+                                <input type="submit" value="Update >>" class="button onlywithcard"/>
+                            </form>
+                        </fieldset>
+                    </div>
+                    <br/>
+                    <h2 class="title2">Branding-Zusatzangaben (optional)</h2>
+                    <button id="showBranding" onclick="showBranding()">Einblenden</button>
+                    <div id="branding" style="display: none">
+                        <div class="postcard-items">
+
+
+                            <fieldset>
+                                <legend>Bild für Briefmarke</legend>
+                                <form id="stampForm">
+
+                                    <input name="stampImage" id="stampImage" type="file" accept=".png, .jpg"
+                                           onchange="readURL(this,'stampImageUp');">
+                                    <br/>
+                                    <img id="stampImageUp" src="https://via.placeholder.com/180?text=deine+Briefmarke"
+                                         alt="dein Briefmarkenbild" class="img-small"/>
+                                    <br/>
+                                    <input type="submit" value="Update >>" class="button onlywithcard"/>
+                                </form>
+                            </fieldset>
+                        </div>
+                        <div class="postcard-items">
+                            <fieldset>
+                                <legend>Branding (nur eine der Optionen möglich)</legend>
+                                <div class="postcard-items">
+                                    <fieldset>
+                                        <legend>Branding-Text</legend>
+                                        <form id="brandingTextForm">
+
+                                            <label for="brandingText">Text:</label>
+                                            <input name="text" id="brandingText"/>
+                                            <label for="blockColor">Hintergrundfarbe (z.B. #FFFFFF):</label>
+                                            <input name="blockColor" id="blockColor" pattern="#+[A-Z0-9]{6}"/>
+                                            <label for="textColor">Textfarbe (z.B. #FFFFFF):</label>
+                                            <input name="textColor" id="textColor" pattern="#+[A-Z0-9]{6}"/>
+                                            <br/>
+                                            <input type="submit" value="Update >>" class="button onlywithcard"/>
+
+                                        </form>
+                                    </fieldset>
+                                </div>
+                                <div class="postcard-items">
+                                    <fieldset>
+                                        <legend>Branding-Bild</legend>
+                                        <form id="brandingImageForm">
+
+                                            <input name="brandingImage" id="brandingImage" type="file"
+                                                   accept=".png, .jpg"
+                                                   onchange="readURL(this,'brandingImageUp');">
+                                            <br/>
+                                            <img id="brandingImageUp"
+                                                 src="https://via.placeholder.com/180?text=Brandingbild"
+                                                 alt="dein Brandingbild" class="img-small">
+                                            <br/>
+                                            <input type="submit" value="Update >>" class="button onlywithcard"/>
+                                        </form>
+                                    </fieldset>
+                                </div>
+                                <div class="postcard-items">
+                                    <fieldset>
+                                        <legend>Branding-QR-Code</legend>
+                                        <form id="brandingQRForm">
+                                            <label for="encodedText">QR-Code (encoded):</label>
+                                            <input name="encodedText" id="encodedText"/>
+                                            <label for="accompanyingText">Text:</label>
+                                            <input name="accompanyingText" id="accompanyingText"/>
+                                            <br/>
+                                            <label for="qrBlockColor">Hintergrundfarbe (z.B. #FFFFFF):</label>
+                                            <input name="blockColor" id="qrBlockColor" pattern="#+[A-Z0-9]{6}"/>
+                                            <label for="qrTextColor">Textfarbe (z.B. #FFFFFF):</label>
+                                            <input name="textColor" id="qrTextColor" pattern="#+[A-Z0-9]{6}"/>
+                                            <br/>
+                                            <input type="submit" value="Update >>" class="button onlywithcard"/>
+                                        </form>
+                                    </fieldset>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                </main>
             </div>
-        </fieldset>
 
-
-        <div class="centerblock">
-            <button id="newCard" class="button">Neue Karte erstellen</button>
-            <button id="clear" onclick="location.reload();" class="button">Karte und Eingaben löschen</button>
-            <button id="previewFront" class="button onlywithcard">Kartenvorschau vorne</button>
-            <button id="previewBack" class="button onlywithcard">Kartenvorschau hinten</button>
-            <button id="approve" class="button onlywithcard">Karte abschicken</button>
-        </fieldset>
-
-
+        </div>
     </div>
-
-    <div id="loader" class="loader"></div>
-    <div class="container">
-
-        <main>
-            <h2 class="title2">Postkarteninhalte</h2>
-
-            <div class="modal"  id="previewModal">
-            <!-- Modal content -->
-            <div class="modal-content">
-                <div class="modal-header">
-                    <span class="close">&times;</span>
-                    <h1 class="title1">Vorschau</h1>
-                </div>
-                <div class="modal-body">
-                    <img id="imagePreview" src="" alt="preview" class="img-large">
-                </div>
-            </div>
-            </div>
-
-            <div class="postcard-items">
-                <fieldset>
-                    <legend>Absender</legend>
-                    <form id="senderForm">
-                        <div class="pair">
-                            <label for="senderLastname">Nachname:</label>
-                            <input name="lastname" id="senderLastname" class="addressfield"/>
-                        </div>
-                        <div class="pair">
-                            <label for="senderFirstname">Vorname:</label>
-                            <input name="firstname" id="senderFirstname" class="addressfield">
-                        </div>
-                        <br/>
-                        <div class="pair">
-                            <label for="senderStreet">Strasse:</label>
-                            <input name="street" id="senderStreet" class="addressfield">
-                        </div>
-                        <div class="pair">
-                            <label for="senderHousenr">Hausnr:</label>
-                            <input name="houseNr" id="senderHousenr" class="addressfield">
-                        </div>
-                        <br/>
-                        <div class="pair">
-                            <label for="senderZip">PLZ:</label>
-                            <input name="zip" id="senderZip" class="addressfield">
-                        </div>
-                        <div class="pair">
-                            <label for="senderCity">Ort:</label>
-                            <input name="city" id="senderCity" class="addressfield">
-                        </div>
-                        <br/>
-                        <input type="submit" value="Update >>" class="button onlywithcard"/>
-                    </form>
-                </fieldset>
-                <fieldset>
-                    <legend>Empfänger</legend>
-                    <form id="recipientForm">
-                        <div class="pair">
-                            <label for="recipientTitle">Titel:</label>
-                            <input name="title" id="recipientTitle" class="addressfield">
-                        </div>
-
-                        <br/>
-                        <div class="pair">
-                            <label for="recipientLastname">Nachname:</label>
-                            <input name="lastname" id="recipientLastname"
-                                   class="addressfield">
-                        </div>
-                        <div class="pair">
-                            <label for="recipientFirstname">Vorname:</label>
-                            <input name="firstname" id="recipientFirstname"
-                                   class="addressfield">
-                        </div>
-                        <br/>
-                        <div class="pair">
-                            <label for="recipientCompany">Firma:</label>
-                            <input name="company" id="recipientCompany" class="addressfield">
-                        </div>
-                        <br/>
-                        <div class="pair">
-                            <label for="recipientStreet">Strasse:</label>
-                            <input name="street" id="recipientStreet" class="addressfield">
-                        </div>
-                        <div class="pair">
-                            <label for="recipientHousenr">Hausnr:</label>
-                            <input name="houseNr" id="recipientHousenr" class="addressfield">
-                        </div>
-                        <br/>
-                        <div class="pair">
-                            <label for="recipientZip">PLZ:</label>
-                            <input name="zip" id="recipientZip" class="addressfield">
-                        </div>
-                        <div class="pair">
-                            <label for="recipientCity">Ort:</label>
-                            <input name="city" id="recipientCity" class="addressfield">
-                        </div>
-                        <br/>
-                        <div class="pair">
-                            <label for="recipientPObox">Postfach:</label>
-                            <input name="poBox" id="recipientPObox" class="addressfield">
-                        </div>
-                        <br/>
-                        <input type="submit" value="Update >>" class="button onlywithcard"/>
-                    </form>
-                </fieldset>
-            </div>
-            <div class="postcard-items">
-                <fieldset>
-                    <legend>Postkartentext</legend>
-                    <form id="senderTextForm">
-                        <textarea name="senderText" id="senderText" style="width:100%;height:200px"></textarea>
-                        <br/>
-                        <input type="submit" value="Update >>" class="button onlywithcard"/>
-
-                    </form>
-                </fieldset>
-                <fieldset style="flex-grow: 1">
-                    <legend>Frontbild</legend>
-                    <form id="imageForm">
-                        <input name="image" id="frontImage" type="file" accept=".png, .jpg"
-                               onchange="readURL(this,'frontImageUp');">
-                        <br/>
-                        <img id="frontImageUp" src="https://via.placeholder.com/180?text=dein+Frontbild"
-                             alt="dein Frontbild" class="img-small">
-                        <br/>
-                        <input type="submit" value="Update >>" class="button onlywithcard"/>
-                    </form>
-                </fieldset>
-            </div>
-            <br/>
-            <h2 class="title2">Branding-Zusatzangaben (optional)</h2>
-            <button id="showBranding" onclick="showBranding()">Einblenden</button>
-            <div id="branding" style="display: none">
-                <div class="postcard-items">
-
-
-                    <fieldset>
-                        <legend>Bild für Briefmarke</legend>
-                        <form id="stampForm">
-
-                            <input name="stampImage" id="stampImage" type="file" accept=".png, .jpg"
-                                   onchange="readURL(this,'stampImageUp');">
-                            <br/>
-                            <img id="stampImageUp" src="https://via.placeholder.com/180?text=deine+Briefmarke"
-                                 alt="dein Briefmarkenbild" class="img-small"/>
-                            <br/>
-                            <input type="submit" value="Update >>" class="button onlywithcard"/>
-                        </form>
-                    </fieldset>
-                </div>
-                <div class="postcard-items">
-                    <fieldset>
-                        <legend>Branding (nur eine der Optionen möglich)</legend>
-                        <div class="postcard-items">
-                            <fieldset>
-                                <legend>Branding-Text</legend>
-                                <form id="brandingTextForm">
-
-                                    <label for="brandingText">Text:</label>
-                                    <input name="text" id="brandingText"/>
-                                    <label for="blockColor">Hintergrundfarbe (z.B. #FFFFFF):</label>
-                                    <input name="blockColor" id="blockColor" pattern="#+[A-Z0-9]{6}"/>
-                                    <label for="textColor">Textfarbe (z.B. #FFFFFF):</label>
-                                    <input name="textColor" id="textColor" pattern="#+[A-Z0-9]{6}"/>
-                                    <br/>
-                                    <input type="submit" value="Update >>" class="button onlywithcard"/>
-
-                                </form>
-                            </fieldset>
-                        </div>
-                        <div class="postcard-items">
-                            <fieldset>
-                                <legend>Branding-Bild</legend>
-                                <form id="brandingImageForm">
-
-                                    <input name="brandingImage" id="brandingImage" type="file" accept=".png, .jpg"
-                                           onchange="readURL(this,'brandingImageUp');">
-                                    <br/>
-                                    <img id="brandingImageUp" src="https://via.placeholder.com/180?text=Brandingbild"
-                                         alt="dein Brandingbild" class="img-small">
-                                    <br/>
-                                    <input type="submit" value="Update >>" class="button onlywithcard"/>
-                                </form>
-                            </fieldset>
-                        </div>
-                        <div class="postcard-items">
-                            <fieldset>
-                                <legend>Branding-QR-Code</legend>
-                                <form id="brandingQRForm">
-                                    <label for="encodedText">QR-Code (encoded):</label>
-                                    <input name="encodedText" id="encodedText"/>
-                                    <label for="accompanyingText">Text:</label>
-                                    <input name="accompanyingText" id="accompanyingText"/>
-                                    <br/>
-                                    <label for="qrBlockColor">Hintergrundfarbe (z.B. #FFFFFF):</label>
-                                    <input name="blockColor" id="qrBlockColor" pattern="#+[A-Z0-9]{6}"/>
-                                    <label for="qrTextColor">Textfarbe (z.B. #FFFFFF):</label>
-                                    <input name="textColor" id="qrTextColor" pattern="#+[A-Z0-9]{6}"/>
-                                    <br/>
-                                    <input type="submit" value="Update >>" class="button onlywithcard"/>
-                                </form>
-                            </fieldset>
-                        </div>
-                    </fieldset>
-                </div>
-            </div>
-        </main>
-    </div>
-
-</div>
 </div>
 
 <script>
@@ -545,49 +557,49 @@
         showSpinner(false);
     };
 
-    document.getElementById("credentialsForm").addEventListener("submit", function (e) {
+    document.getElementById('credentialsForm').addEventListener('submit', function (e) {
         e.preventDefault();
     });
 
     // Get credentials out of localstorage, if saved
-    document.getElementById("identifier").value = getSavedValue("identifier");
-    document.getElementById("secret").value = getSavedValue("secret");
-    document.getElementById("campaign").value = getSavedValue("campaign");
+    document.getElementById('identifier').value = getSavedValue('identifier');
+    document.getElementById('secret').value = getSavedValue('secret');
+    document.getElementById('campaign').value = getSavedValue('campaign');
 
 
     // add funtionality to Button "neue Karte erstellen"
-    document.getElementById("newCard").addEventListener("click", function (e) {
+    document.getElementById('newCard').addEventListener('click', function (e) {
         e.preventDefault();
 
-        document.getElementById("lastRequest").innerHTML = "Neue Karte anlegen";
-            secondPartUrl = "pcc/api/v1/postcards?campaignKey=" + document.getElementById("campaign").value;
-        currentReqMethod = "POST";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Neue Karte anlegen';
+        secondPartUrl = 'pcc/api/v1/postcards?campaignKey=' + document.getElementById('campaign').value;
+        currentReqMethod = 'POST';
+        currentReqType = 'application/json';
 
         var jsonReq = {};
-        var senderAddress = formToJSON(document.getElementById("senderForm"));
+        var senderAddress = formToJSON(document.getElementById('senderForm'));
         if (!isEmpty(senderAddress)) {
-            jsonReq["senderAddress"] = senderAddress;
+            jsonReq['senderAddress'] = senderAddress;
         }
-        var recipientAddress = formToJSON(document.getElementById("recipientForm"));
+        var recipientAddress = formToJSON(document.getElementById('recipientForm'));
         if (!isEmpty(recipientAddress)) {
-            jsonReq["recipientAddress"] = recipientAddress;
+            jsonReq['recipientAddress'] = recipientAddress;
         }
-        var senderText = document.getElementById("senderText").value;
+        var senderText = document.getElementById('senderText').value;
         if (senderText) {
-            jsonReq["senderText"] = senderText;
+            jsonReq['senderText'] = senderText;
         }
         var brandingObj = {};
-        var brandingText = formToJSON(document.getElementById("brandingTextForm"));
+        var brandingText = formToJSON(document.getElementById('brandingTextForm'));
         if (!isEmpty(brandingText)) {
-            brandingObj["brandingText"] = brandingText;
+            brandingObj['brandingText'] = brandingText;
         }
-        var brandingQRCode = formToJSON(document.getElementById("brandingQRForm"));
+        var brandingQRCode = formToJSON(document.getElementById('brandingQRForm'));
         if (!isEmpty(brandingQRCode)) {
-            brandingObj["brandingQRCode"] = brandingQRCode;
+            brandingObj['brandingQRCode'] = brandingQRCode;
         }
         if (!isEmpty(brandingObj)) {
-            jsonReq["branding"] = brandingObj;
+            jsonReq['branding'] = brandingObj;
         }
 
         currentReqBody = JSON.stringify(jsonReq);
@@ -595,36 +607,36 @@
     });
 
     // add funtionality to Button "vorschau hinten"
-    document.getElementById("previewBack").addEventListener("click", function (e) {
+    document.getElementById('previewBack').addEventListener('click', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Vorschau Karte hinten";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/previews/back";
-        currentReqMethod = "GET";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Vorschau Karte hinten';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/previews/back';
+        currentReqMethod = 'GET';
+        currentReqType = 'application/json';
 
         currentReqBody = null;
         sendRequestwithOauth2Token();
     });
 
     // add funtionality to Button "vorschau vorne"
-    document.getElementById("previewFront").addEventListener("click", function (e) {
+    document.getElementById('previewFront').addEventListener('click', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Vorschau Karte vorne";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/previews/front";
-        currentReqMethod = "GET";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Vorschau Karte vorne';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/previews/front';
+        currentReqMethod = 'GET';
+        currentReqType = 'application/json';
 
         currentReqBody = null;
         sendRequestwithOauth2Token();
     });
 
     // add funtionality to Button "Karte abschicken"
-    document.getElementById("approve").addEventListener("click", function (e) {
+    document.getElementById('approve').addEventListener('click', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Karte abschicken";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/approval";
-        currentReqMethod = "POST";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Karte abschicken';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/approval';
+        currentReqMethod = 'POST';
+        currentReqType = 'application/json';
 
         currentReqBody = null;
         sendRequestwithOauth2Token();
@@ -632,15 +644,15 @@
 
 
     // add funtionality to Form "Absender"
-    document.getElementById("senderForm").addEventListener("submit", function (e) {
+    document.getElementById('senderForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Absender ändern";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/addresses/sender";
-        currentReqMethod = "PUT";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Absender ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/addresses/sender';
+        currentReqMethod = 'PUT';
+        currentReqType = 'application/json';
 
         var jsonReq = {};
-        var senderAddress = formToJSON(document.getElementById("senderForm"));
+        var senderAddress = formToJSON(document.getElementById('senderForm'));
         if (!isEmpty(senderAddress)) {
             jsonReq = senderAddress;
         }
@@ -651,15 +663,15 @@
 
 
     // add funtionality to Form "Empfänger"
-    document.getElementById("recipientForm").addEventListener("submit", function (e) {
+    document.getElementById('recipientForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Empfänger ändern";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/addresses/recipient";
-        currentReqMethod = "PUT";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Empfänger ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/addresses/recipient';
+        currentReqMethod = 'PUT';
+        currentReqType = 'application/json';
 
         var jsonReq = {};
-        var recipientAddress = formToJSON(document.getElementById("recipientForm"));
+        var recipientAddress = formToJSON(document.getElementById('recipientForm'));
         if (!isEmpty(recipientAddress)) {
             jsonReq = recipientAddress;
         }
@@ -670,45 +682,45 @@
 
 
     // add funtionality to Form "Text"
-    document.getElementById("senderTextForm").addEventListener("submit", function (e) {
+    document.getElementById('senderTextForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Postkartentext ändern";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/sendertext?senderText="+document.getElementById("senderText").value;
-        currentReqMethod = "PUT";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Postkartentext ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/sendertext?senderText=' + document.getElementById('senderText').value;
+        currentReqMethod = 'PUT';
+        currentReqType = 'application/json';
 
         currentReqBody = null;
         sendRequestwithOauth2Token();
     });
 
     // add funtionality to Form "Image"
-    document.getElementById("imageForm").addEventListener("submit", function (e) {
+    document.getElementById('imageForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Frontbild ändern";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/image";
-        currentReqMethod = "PUT";
+        document.getElementById('lastRequest').innerHTML = 'Frontbild ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/image';
+        currentReqMethod = 'PUT';
 
-        var form = document.getElementById("imageForm");
+        var form = document.getElementById('imageForm');
         var currentFormData = new FormData();
-        currentFormData.append("image", document.getElementById("frontImage").files[0], "image");
+        currentFormData.append('image', document.getElementById('frontImage').files[0], 'image');
 
 
-         sendAsFormData = true;
-         currentReqBody = currentFormData;
-         sendRequestwithOauth2Token();
+        sendAsFormData = true;
+        currentReqBody = currentFormData;
+        sendRequestwithOauth2Token();
     });
 
 
     // add funtionality to Form "Branding Text"
-    document.getElementById("brandingTextForm").addEventListener("submit", function (e) {
+    document.getElementById('brandingTextForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Brandingtext ändern";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/branding/text";
-        currentReqMethod = "PUT";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Brandingtext ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/branding/text';
+        currentReqMethod = 'PUT';
+        currentReqType = 'application/json';
 
         var jsonReq = {};
-        var brandingText = formToJSON(document.getElementById("brandingTextForm"));
+        var brandingText = formToJSON(document.getElementById('brandingTextForm'));
         if (!isEmpty(brandingText)) {
             jsonReq = brandingText;
         }
@@ -719,15 +731,15 @@
 
 
     // add funtionality to Form "Branding QR-Code"
-    document.getElementById("brandingQRForm").addEventListener("submit", function (e) {
+    document.getElementById('brandingQRForm').addEventListener('submit', function (e) {
         e.preventDefault();
-        document.getElementById("lastRequest").innerHTML = "Branding QR-Code ändern";
-        secondPartUrl = "pcc/api/v1/postcards/" + cardKey + "/branding/qrtag";
-        currentReqMethod = "PUT";
-        currentReqType = "application/json";
+        document.getElementById('lastRequest').innerHTML = 'Branding QR-Code ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/branding/qrtag';
+        currentReqMethod = 'PUT';
+        currentReqType = 'application/json';
 
         var jsonReq = {};
-        var brandingQr = formToJSON(document.getElementById("brandingQRForm"));
+        var brandingQr = formToJSON(document.getElementById('brandingQRForm'));
         if (!isEmpty(brandingQr)) {
             jsonReq = brandingQr;
         }
@@ -743,9 +755,9 @@
     // show loading spinner
     function showSpinner(show) {
         if (show) {
-            document.getElementById("loader").style.display = "block";
+            document.getElementById('loader').style.display = 'block';
         } else {
-            document.getElementById("loader").style.display = "none";
+            document.getElementById('loader').style.display = 'none';
         }
 
     }
@@ -754,14 +766,14 @@
     function showBranding() {
         if (brandingVisible) {
             // hide
-            document.getElementById("showBranding").innerHTML = "Einblenden";
-            document.getElementById("branding").style.display = "none";
+            document.getElementById('showBranding').innerHTML = 'Einblenden';
+            document.getElementById('branding').style.display = 'none';
             brandingVisible = false;
 
         } else {
             //show
-            document.getElementById("showBranding").innerHTML = "Ausblenden";
-            document.getElementById("branding").style.display = "block";
+            document.getElementById('showBranding').innerHTML = 'Ausblenden';
+            document.getElementById('branding').style.display = 'block';
             brandingVisible = true;
         }
     };
@@ -781,7 +793,7 @@
 
     //control the fields who are only active when a card exists
     function setDisabled(disable) {
-        var cardElements = document.getElementsByClassName("onlywithcard");
+        var cardElements = document.getElementsByClassName('onlywithcard');
         [].forEach.call(cardElements, function (cardElement) {
             cardElement.disabled = disable;
         })
@@ -790,42 +802,42 @@
     // setting a new cardkey
     function setCardKey(key) {
         cardKey = key;
-        var elementCardKey = document.getElementById("cardKey");
+        var elementCardKey = document.getElementById('cardKey');
         if (key) {
             setDisabled(false);
             elementCardKey.innerHTML = key;
         } else {
             setDisabled(true);
-            elementCardKey.innerHTML = "(leer)";
+            elementCardKey.innerHTML = '(leer)';
         }
     }
 
     // get a oauth2 token and then send the request with this token
     function sendRequestwithOauth2Token() {
 
-        var urlEncodedData = "";
+        var urlEncodedData = '';
         var urlEncodedDataPairs = [];
         var param;
 
         //set the environment
-        var env = document.getElementsByName("environment");
+        var env = document.getElementsByName('environment');
         if (env[1].checked) {
-            firstPartUrl = "https://api.post.ch/";
+            firstPartUrl = 'https://api.post.ch/';
         } else {
-            firstPartUrl = "https://apiint.post.ch/";
+            firstPartUrl = 'https://apiint.post.ch/';
         }
 
 
         var req = new XMLHttpRequest();
         req.open('POST',
-            firstPartUrl + "OAuth/token", true);
-        req.setRequestHeader('Content-Type', "application/x-www-form-urlencoded");
+            firstPartUrl + 'OAuth/token', true);
+        req.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
         // form data for the post request
         var data = {
-            "grant_type": "client_credentials",
-            "client_id": document.getElementById("identifier").value,
-            "client_secret": document.getElementById("secret").value,
-            "scope": "PCCAPI"
+            'grant_type': 'client_credentials',
+            'client_id': document.getElementById('identifier').value,
+            'client_secret': document.getElementById('secret').value,
+            'scope': 'PCCAPI'
         };
 
         // to send it as typ application/x-www-form-urlencoded the key-value pairs
@@ -844,18 +856,18 @@
         req.onreadystatechange = function (e) {
             if (req.readyState === 4 && req.status === 200) {
                 var accesscode = JSON.parse(this.response);
-                currentToken = "Bearer " + accesscode.access_token;
-                console.log("Token OK")
+                currentToken = 'Bearer ' + accesscode.access_token;
+                console.log('Token OK')
                 // save credentials to localstorage for further use
-                saveValue(document.getElementById("identifier"));
-                saveValue(document.getElementById("secret"));
-                saveValue(document.getElementById("campaign"));
+                saveValue(document.getElementById('identifier'));
+                saveValue(document.getElementById('secret'));
+                saveValue(document.getElementById('campaign'));
                 //token ok, now do the request
                 standardRequest();
             } else if (req.readyState === 4 && req.status === 401) {
                 // Token invalid
                 currentToken = null;
-                alert("Zugriffsdaten ungültig / abgelehnt");
+                alert('Zugriffsdaten ungültig / abgelehnt');
                 showSpinner(false);
             }
         };
@@ -871,8 +883,8 @@
 
         var reqhttp = new XMLHttpRequest();
         reqhttp.open(currentReqMethod, currentReqUrl, true);
-        if (!sendAsFormData)  reqhttp.setRequestHeader("Content-type", currentReqType);
-        reqhttp.setRequestHeader("Authorization", currentToken);
+        if (!sendAsFormData) reqhttp.setRequestHeader('Content-type', currentReqType);
+        reqhttp.setRequestHeader('Authorization', currentToken);
 
         reqhttp.onreadystatechange = function (e) {
             if (reqhttp.readyState === 4) {
@@ -880,7 +892,7 @@
                 currentRespHTTPStatus = reqhttp.status;
                 if (reqhttp.status >= 400) {
                     currentResponse = reqhttp.statusText;
-                    showLastRequestState("NOK", null);
+                    showLastRequestState('NOK', null);
                 } else {
                     proceedResponse();
                 }
@@ -901,38 +913,38 @@
         sendAsFormData = false;
         var jsonvalue = {};
         if (isEmpty(currentResponse)) {
-            currentResponse = "Bad request";
+            currentResponse = 'Bad request';
         } else {
             jsonvalue = JSON.parse(currentResponse);
         }
 
-        var state = "OK";
-        var text = "";
-        if (jsonvalue.hasOwnProperty("warnings") && jsonvalue.warnings.length > 0) {
-            state = "WARN";
-            text = "Warnungen:"
+        var state = 'OK';
+        var text = '';
+        if (jsonvalue.hasOwnProperty('warnings') && jsonvalue.warnings.length > 0) {
+            state = 'WARN';
+            text = 'Warnungen:'
             for (i in jsonvalue.warnings) {
-                text += "<br/>" + jsonvalue.warnings[i].code + "-" + jsonvalue.warnings[i].description;
+                text += '<br/>' + jsonvalue.warnings[i].code + '-' + jsonvalue.warnings[i].description;
             }
 
-        } else if (jsonvalue.hasOwnProperty("errors") && jsonvalue.errors.length > 0) {
+        } else if (jsonvalue.hasOwnProperty('errors') && jsonvalue.errors.length > 0) {
             //Request was successfull but contains errors, show warning
-            state = "NOK";
-            text = "Fehler:"
+            state = 'NOK';
+            text = 'Fehler:'
             for (i in jsonvalue.errors) {
-                text += "<br/>" + jsonvalue.errors[i].code + "-" + jsonvalue.errors[i].description;
+                text += '<br/>' + jsonvalue.errors[i].code + '-' + jsonvalue.errors[i].description;
             }
         }
 
         showLastRequestState(state, text);
 
-        if (jsonvalue.hasOwnProperty("imagedata")) {
+        if (jsonvalue.hasOwnProperty('imagedata')) {
             // it's a preview
             showImage(jsonvalue.imagedata);
         } else {
             //basic response
             //save the cardKey from the response
-            if (jsonvalue.hasOwnProperty("cardKey")) {
+            if (jsonvalue.hasOwnProperty('cardKey')) {
                 setCardKey(jsonvalue.cardKey);
             }
 
@@ -944,44 +956,44 @@
 
     //show the last request state
     function showLastRequestState(state, text) {
-        var ok = document.getElementById("requestOK");
-        var nok = document.getElementById("requestNOK");
-        var warn = document.getElementById("requestWARN");
-        if (state === "OK") {
-            ok.style.display = "inline-flex";
-            nok.style.display = "none";
-            warn.style.display = "none";
-            ok.lastElementChild.innerHTML = "HTTP-Status: " + currentRespHTTPStatus;
-        } else if (state === "WARN") {
-            ok.style.display = "none";
-            nok.style.display = "none";
-            warn.style.display = "inline-flex";
-            warn.lastElementChild.innerHTML = "HTTP-Status: " + currentRespHTTPStatus;
+        var ok = document.getElementById('requestOK');
+        var nok = document.getElementById('requestNOK');
+        var warn = document.getElementById('requestWARN');
+        if (state === 'OK') {
+            ok.style.display = 'inline-flex';
+            nok.style.display = 'none';
+            warn.style.display = 'none';
+            ok.lastElementChild.innerHTML = 'HTTP-Status: ' + currentRespHTTPStatus;
+        } else if (state === 'WARN') {
+            ok.style.display = 'none';
+            nok.style.display = 'none';
+            warn.style.display = 'inline-flex';
+            warn.lastElementChild.innerHTML = 'HTTP-Status: ' + currentRespHTTPStatus;
         } else {
-            ok.style.display = "none";
-            nok.style.display = "inline-flex";
-            warn.style.display = "none";
-            nok.lastElementChild.innerHTML = "HTTP-Status: " + currentRespHTTPStatus;
+            ok.style.display = 'none';
+            nok.style.display = 'inline-flex';
+            warn.style.display = 'none';
+            nok.lastElementChild.innerHTML = 'HTTP-Status: ' + currentRespHTTPStatus;
         }
 
-        document.getElementById("requestDetail").style.display = "block";
+        document.getElementById('requestDetail').style.display = 'block';
 
-        document.getElementById("requestAnswer").innerHTML = text;
-        document.getElementById("outlineRequest").innerHTML = currentReqMethod+" "+currentReqUrl + "<br/>" + "Body: <br/>" + currentReqBody;
-		var subResponse = currentResponse;
-		if (subResponse.length > 1000) {
-			subResponse = subResponse.substring(0, 1000) + "...";
-		}
-        document.getElementById("outlineResponse").innerHTML = "HTTP-Status: " + currentRespHTTPStatus + "<br/>" + currentResponse;
+        document.getElementById('requestAnswer').innerHTML = text;
+        document.getElementById('outlineRequest').innerHTML = currentReqMethod + ' ' + currentReqUrl + '<br/>' + 'Body: <br/>' + currentReqBody;
+        var subResponse = currentResponse;
+        if (subResponse.length > 1000) {
+            subResponse = subResponse.substring(0, 1000) + '...';
+        }
+        document.getElementById('outlineResponse').innerHTML = 'HTTP-Status: ' + currentRespHTTPStatus + '<br/>' + currentResponse;
 
     }
 
     //show image in new window
     function showImage(image) {
-      var src = "data:image/jpeg;base64,"+image;
-      console.log(src);
-      modal.style.display = "block";
-      document.getElementById("imagePreview").src = src;
+        var src = 'data:image/jpeg;base64,' + image;
+        console.log(src);
+        modal.style.display = 'block';
+        document.getElementById('imagePreview').src = src;
 
     }
 
@@ -989,7 +1001,7 @@
     //convert a form to a json-format
     function formToJSON(form) {
         var obj = {};
-        var elements = form.querySelectorAll("input, textarea");
+        var elements = form.querySelectorAll('input, textarea');
         for (var i = 0; i < elements.length; ++i) {
             var element = elements[i];
             var name = element.name;
@@ -1011,41 +1023,36 @@
     }
 
 
-
-
     // Get the <span> element that closes the modal
-    var span = document.getElementsByClassName("close")[0];
+    var span = document.getElementsByClassName('close')[0];
 
     // When the user clicks on x, close the modal
-    span.onclick = function() {
-        modal.style.display = "none";
+    span.onclick = function () {
+        modal.style.display = 'none';
     }
 
     // When the user clicks anywhere outside of the modal, close it
-    window.onclick = function(event) {
+    window.onclick = function (event) {
         if (event.target == modal) {
-            modal.style.display = "none";
+            modal.style.display = 'none';
         }
     }
 
 
     //Save the value function - save it to localStorage as (ID, VALUE)
-    function saveValue(e){
+    function saveValue(e) {
         var id = e.id;
         var val = e.value;
         localStorage.setItem(id, val);
     }
 
     //get the saved value
-    function getSavedValue  (v){
+    function getSavedValue(v) {
         if (localStorage.getItem(v) === null) {
-            return "";
+            return '';
         }
         return localStorage.getItem(v);
     }
-
-
-    
 
 
 </script>

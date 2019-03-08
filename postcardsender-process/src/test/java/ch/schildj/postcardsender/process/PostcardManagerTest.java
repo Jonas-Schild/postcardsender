@@ -28,6 +28,7 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.concurrent.TimeUnit;
@@ -102,8 +103,9 @@ public class PostcardManagerTest extends AbstractTransactionalJUnit4SpringContex
     @Rollback
     public void createNewPostcardWithImage() throws Exception{
 
+            URL url = this.getClass().getResource("/images/testbildPostkarte.png");
 
-            BufferedImage originalImage = ImageIO.read(new File("c:\\temp\\IMG_1619.jpg"));
+            BufferedImage originalImage = ImageIO.read(new File(url.toURI()));
             ByteArrayOutputStream baos = new ByteArrayOutputStream();
             ImageIO.write( originalImage, "jpg", baos );
             baos.flush();

@@ -18,6 +18,11 @@ export class PostcardService {
     return this.http.post<number>(`${POSTCARD_API_PUBLIC}/new`, postcard)
       .pipe(
         catchError(err => {
+            // 429 too many requests
+            if (err.status === 429) {
+              return this.toastService.handleErrorWithCustomText(err, 'Limit erreicht',
+                'Heute können Sie keine Postkarten mehr versenden.');
+            }
             return this.toastService.handleError(err);
           }
         )

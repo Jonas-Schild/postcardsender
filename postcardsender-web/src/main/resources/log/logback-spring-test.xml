@@ -88,10 +88,7 @@
         </encoder>
     </appender>
 
-    <!-- The Perf4J logger. Note that org.perf4j.Timinglogger is the value of
-        the org.perf4j.StopWatch.DEFAULT_LOGGER_NAME constant. Also, note that additivity
-        is set to false, which is usually what is desired - this means that timing
-        statements will only be sent to this logger and NOT to upstream loggers. -->
+
     <logger name="org.perf4j.TimingLogger" level="INFO" additivity="false">
         <appender-ref ref="performanceFileAppender"/>
     </logger>
@@ -136,8 +133,6 @@
     <logger name="com.github.ziplet" level="WARN"/>
 
     <logger name="com.zaxxer.hikari.pool.HikariPool" level="INFO"/>
-
-    <logger name="ch.schildj.common" level="WARN"/>
 
     <logger name="springfox" level="INFO"/>
 

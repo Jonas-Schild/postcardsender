@@ -13,7 +13,7 @@ import java.util.Properties;
 /**
  * This controller exposes the "angularMessageSource" resource bundle as JSON object. The bundles will be retrieved by
  * the "angular-translate-loader-static-files" "angular-translate" plugin asynchronously.
- * {@link https://github.com/angular-translate/bower-angular-translate-loader-static-files}.
+ * (https://github.com/angular-translate/bower-angular-translate-loader-static-files).
  */
 @Api(value="translations", description="Translations-File")
 @RestController

@@ -10,10 +10,16 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Repository
 public interface PostcardRepository extends JpaRepository<Postcard, Long>, JpaSpecificationExecutor<Postcard> {
 
     @Query("SELECT p FROM Postcard p WHERE p.campaign.id = :campId order by p.cdate DESC")
     Page<PostcardDTO> findAllByCampaign(@Param("campId") Long campId, Pageable pageable);
+
+    @Query("SELECT p FROM Postcard p WHERE p.status = ch.schildj.postcardsender.domain.enums.PostcardState.OPEN and p.cdate < :dateTime")
+    List<Postcard> findUnapproved(@Param("dateTime") LocalDateTime dateTime);
 
 }

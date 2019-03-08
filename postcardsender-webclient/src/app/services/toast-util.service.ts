@@ -27,6 +27,13 @@ export class ToastUtilService {
       error.error);
   }
 
+  public handleErrorWithCustomText(error: HttpErrorResponse, title: string, text: string) {
+    this.toastError(title, text);
+    // return an observable
+    return throwError(
+      error.error);
+  }
+
 
   public toastSuccess(titleCode, messageCode) {
     const title = this.translateService.instant(titleCode);

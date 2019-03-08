@@ -82,7 +82,7 @@ export function HttpLoaderFactory(http: HttpClient) {
     BrowserAnimationsModule,
     ToastrModule.forRoot({
       closeButton: true,
-      timeOut: 1500,
+      timeOut: 3000,
       preventDuplicates: true,
     }),
     TranslateModule.forRoot({

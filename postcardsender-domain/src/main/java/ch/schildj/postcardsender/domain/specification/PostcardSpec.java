@@ -5,12 +5,10 @@ import ch.schildj.postcardsender.domain.enums.TransmissionState;
 import ch.schildj.postcardsender.domain.model.Postcard;
 import org.springframework.data.jpa.domain.Specification;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 /**
  * JPA Specification-Class for Postcards to add several restrictions
- *
  */
 
 public class PostcardSpec {
@@ -36,10 +34,10 @@ public class PostcardSpec {
     }
 
     public static Specification<Postcard> isDateAfter(LocalDateTime date) {
-        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(root.<LocalDateTime>get("mdate"), date);
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.greaterThan(root.<LocalDateTime>get("cdate"), date);
     }
 
     public static Specification<Postcard> isDateBefore(LocalDateTime date) {
-        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.equal(root.<LocalDate>get("mdate"), date);
+        return (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.lessThan(root.<LocalDateTime>get("cdate"), date);
     }
 }

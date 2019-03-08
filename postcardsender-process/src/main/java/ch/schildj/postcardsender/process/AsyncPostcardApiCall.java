@@ -46,7 +46,7 @@ public class AsyncPostcardApiCall {
 
     @Async("threadPoolTaskExecutor")
     @Transactional
-    public void apiCallWithCardElements(Postcard postcard, PostcardManager.CardElementType type) {
+        public void apiCallWithCardElements(Postcard postcard, PostcardManager.CardElementType type) {
         // reload Postcard, to have a valid session to load the blobs
         postcard = postcardRepository.getOne(postcard.getId());
         PostCardApiCall call = postcardApiCallProvider.getNewPostCardApiCall(PostcardApiObjectConverter.toPostcardApiDto(postcard));

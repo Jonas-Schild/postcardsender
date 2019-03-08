@@ -57,7 +57,7 @@ export class StateService {
       null,
       null,
       null,
-      null,
+      this.currentCampaign.getValue().id,
       null,
       null);
   }

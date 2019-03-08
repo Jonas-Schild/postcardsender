@@ -55,10 +55,12 @@ export class PostcardComponent implements OnInit {
     }
 
     this.stateService.currentCampaign.subscribe(camp => {
+      console.log('new campaign');
       this.campaign = camp;
       if (camp.id != null) {
         // get current postcard
         this.stateService.currentPostcard.subscribe(postcard => {
+            console.log('new postcard');
             this.postcard = postcard;
             this.postcard.campaignId = camp.id;
             this.recipient = new Address(
@@ -78,9 +80,11 @@ export class PostcardComponent implements OnInit {
         )
         ;
 
+
         // get images
         if (camp.imgType === 'PREDEFINED') {
           this.campaignService.getImages(camp.id).subscribe(imageIds => {
+              console.log('reload images' + imageIds.length);
               this.images = new Array<object>();
               for (const id of imageIds) {
                 this.imageService.getImageFile(id).subscribe(image => {

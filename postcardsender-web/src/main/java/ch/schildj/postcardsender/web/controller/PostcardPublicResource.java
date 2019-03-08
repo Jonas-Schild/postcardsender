@@ -12,6 +12,7 @@ import ch.schildj.postcardsender.domain.model.dto.CardhistoryDTO;
 import ch.schildj.postcardsender.domain.model.dto.PostcardDTO;
 import ch.schildj.postcardsender.domain.repository.CardhistoryRepository;
 import ch.schildj.postcardsender.domain.repository.ImageRepository;
+import ch.schildj.postcardsender.exception.MaxLimitReachedException;
 import ch.schildj.postcardsender.process.PostcardManager;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -79,7 +80,11 @@ public class PostcardPublicResource {
 
             Long postcardId = postcardManager.createNewPostcard(postcardDTO, getCallerIpAddress(request));
             return ResponseEntity.status(HttpStatus.OK).body(postcardId);
-        } catch (Exception e) {
+        }
+        catch (MaxLimitReachedException me) {
+            return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
+        }
+        catch (Exception e) {
             LOGGER.error("FAIL to create card !" + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }

@@ -4,6 +4,7 @@ import ch.schildj.postcardsender.apicall.process.PostCardApiCall;
 import ch.schildj.postcardsender.apicall.process.PostcardApiCallProvider;
 import ch.schildj.postcardsender.domain.enums.PostcardState;
 import ch.schildj.postcardsender.domain.enums.TransmissionState;
+import ch.schildj.postcardsender.domain.model.Campaign;
 import ch.schildj.postcardsender.domain.model.Image;
 import ch.schildj.postcardsender.domain.model.Postcard;
 import ch.schildj.postcardsender.domain.model.dto.AddressDTO;
@@ -13,7 +14,10 @@ import ch.schildj.postcardsender.domain.repository.CampaignRepository;
 import ch.schildj.postcardsender.domain.repository.ImageRepository;
 import ch.schildj.postcardsender.domain.repository.PostcardRepository;
 import ch.schildj.postcardsender.domain.specification.PostcardSpec;
+import ch.schildj.postcardsender.exception.MaxLimitReachedException;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,6 +27,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -51,6 +59,8 @@ public class PostcardManager {
     public enum CardElementType {
         NEW, TEXT, SENDER, RECIPIENT, APPROVE, IMAGE, BRAND_TEXT, BRAND_QR, BRAND_IMG
     }
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(PostcardManager.class);
 
     /*
      * converts a postcard-DTO to an entity
@@ -98,8 +108,13 @@ public class PostcardManager {
      * @return the id of the created postcard
      */
     @Transactional
-    public Long createNewPostcard(PostcardDTO postcardDTO, String ipAddressCaller) {
+    public Long createNewPostcard(PostcardDTO postcardDTO, String ipAddressCaller) throws MaxLimitReachedException {
         Postcard newPostcard = this.toEntity(postcardDTO);
+        if (isLimitReached(ipAddressCaller, newPostcard.getCampaign())) {
+            LOGGER.info("Limit reached for ip: " + ipAddressCaller);
+            throw new MaxLimitReachedException("Limit erreicht, heute können Sie keine Postkarten mehr versenden.");
+        }
+
         newPostcard.setIpAddress(ipAddressCaller);
         newPostcard.setTransmissionState(TransmissionState.OPEN);
         postcardRepository.saveAndFlush(newPostcard);
@@ -315,5 +330,39 @@ public class PostcardManager {
 
     }
 
+    /*
+     * check how many cards are sent with the IP-Adress within the same day
+     * and returns true if the limit, defined at the campaign, is reached.
+     *
+     * @param ip         - the ip-address to check
+     * @param campaign   - the campaign the postcard belongs to
+     */
+     private boolean isLimitReached(String ip, Campaign campaign) {
+
+         Integer limit = campaign.getMaxCards();
+
+
+         if (limit != null) {
+
+             LocalTime midnight = LocalTime.MIDNIGHT;
+             LocalDate today = LocalDate.now();
+             LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+             // get all cards with the same IP between today 00:00 until now
+             Specification<Postcard> spec = PostcardSpec.isFromCampaign(campaign.getId()).and(PostcardSpec.hasIpAddress(ip)).and(PostcardSpec.isDateAfter(todayMidnight).and(PostcardSpec.isDateBefore(LocalDateTime.now())));
+
+             List<Postcard> result = postcardRepository.findAll(
+                     Specification.where(spec)
+             );
+
+             LOGGER.info(ip + "has sent Postcards " + result.size());
+
+             if (result != null && result.size() >= limit) {
+                 return true;
+             }
+
+         }
+
+         return false;
+     }
 
 }
