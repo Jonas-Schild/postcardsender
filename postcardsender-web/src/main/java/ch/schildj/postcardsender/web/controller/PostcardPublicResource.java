@@ -31,14 +31,14 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/public/postcard")
-@Api(value="postcard", description="Operations relevant on the postcard")
+@Api(value = "postcard", description = "Operations relevant on the postcard")
 public class PostcardPublicResource {
 
-    private ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
-    private CardhistoryRepository cardhistoryRepository;
+    private final CardhistoryRepository cardhistoryRepository;
 
-    private PostcardManager postcardManager;
+    private final PostcardManager postcardManager;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostcardPublicResource.class);
 
@@ -80,11 +80,9 @@ public class PostcardPublicResource {
 
             Long postcardId = postcardManager.createNewPostcard(postcardDTO, getCallerIpAddress(request));
             return ResponseEntity.status(HttpStatus.OK).body(postcardId);
-        }
-        catch (MaxLimitReachedException me) {
+        } catch (MaxLimitReachedException me) {
             return ResponseEntity.status(HttpStatus.TOO_MANY_REQUESTS).body(null);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             LOGGER.error("FAIL to create card !" + e.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
@@ -154,8 +152,6 @@ public class PostcardPublicResource {
 
         return ip;
     }
-
-
 
 
 }

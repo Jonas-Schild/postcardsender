@@ -1,12 +1,10 @@
 package ch.schildj.postcardsender.domain.model.dto;
 
 import ch.schildj.postcardsender.domain.converter.CustLocalDateTimeDeserializer;
-import ch.schildj.postcardsender.domain.converter.LocalDateTimeSerializer;
 import ch.schildj.postcardsender.domain.enums.PostcardState;
 import ch.schildj.postcardsender.domain.enums.TransmissionState;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 
 import java.time.LocalDateTime;
 

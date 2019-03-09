@@ -1,16 +1,13 @@
-<h1>
+<h4>
   Bitte Kampagne wählen
-</h1>
+</h4>
 <div *ngFor="let campaign of campaigns; let i = index" [attr.data-index]="i">
   <div class="jumbotron jumbotron-fluid jumbotron-small">
     <div class="col-md-12">
 
       <div class="row">
-        <div class="col-md-10">
+        <div class="col-md-12">
           <b>{{campaign.desc}}</b>
-        </div>
-        <div class="col-md-2">
-          <button class="btn btn-primary float-right" (click)="selectCampaign(campaign)">wählen</button>
         </div>
       </div>
       <div class="row">
@@ -18,14 +15,20 @@
           - {{campaign.validTo | date:'dd.MM.yyyy'}}</div>
 
       </div>
-      <div *ngIf="adminMode" class="row">
+      <div class="row">
+        <div class="col-md-10">
+          <div *ngIf="adminMode">
+            <button class=" btn btn-outline-secondary" (click)="editCampaign(campaign)"><i class="fa fa-edit"
+                                                                                           style="margin-right: 0.5em;"></i>
+              Bearbeiten
+            </button>
+          </div>
+        </div>
         <div class="col-md-2">
-          <button class=" btn btn-outline-secondary" (click)="editCampaign(campaign)"><i class="fa fa-edit"
-                                                                                         style="font-size: 1.5em; margin-right: 0.5em;"></i>
-            Ändern
-          </button>
+          <button class="btn btn-primary float-right" (click)="selectCampaign(campaign)">wählen</button>
         </div>
       </div>
+
     </div>
   </div>
 

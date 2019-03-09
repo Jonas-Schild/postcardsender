@@ -21,13 +21,11 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringRunner;
 
-
 import javax.imageio.ImageIO;
 import javax.sql.rowset.serial.SerialBlob;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,9 +58,9 @@ public class PostcardManagerTest extends AbstractTransactionalJUnit4SpringContex
         this.campaign.setDesc("Testkampagne");
         this.campaign.setImgType(ImageType.PREDEFINED);
         this.campaign.setMaxCards(1000);
-        this.campaign.setValidFrom(LocalDate.of(2019, 01, 01));
+        this.campaign.setValidFrom(LocalDate.of(2019, 1, 1));
         this.campaign.setValidTo(LocalDate.of(2022, 12, 31));
-        this.campaign.setBrandText("Merci");
+        this.campaign.setBrandText("Dies ist ein Beispiel-Grusstext");
         this.campaign.setBrandType(BrandingType.TEXT);
         campaignRepository.saveAndFlush(this.campaign);
 
@@ -73,22 +71,22 @@ public class PostcardManagerTest extends AbstractTransactionalJUnit4SpringContex
         campaignRepository.delete(this.campaign);
     }
 
-
+    // if you add client and id to application-unittest.properties, you can remove the "ignore"-annotation
     @Ignore
     @Test
     @Rollback
-    public void createNewPostcard() throws Exception{
+    public void createNewPostcard() throws Exception {
 
 
         PostcardDTO postcardDTO = new PostcardDTO(
                 null, null, "test text", "Joe", "Smith", "Bernstrasse", "1a", "3000", "Bern",
                 "Meier", "Hans", "Hauptstrasse", "2", "8000", "Zürich",
-                 LocalDateTime.now(), null, this.campaign.getId(), PostcardState.OPEN.name(), TransmissionState.OPEN.name()
+                LocalDateTime.now(), null, this.campaign.getId(), PostcardState.OPEN.name(), TransmissionState.OPEN.name()
         );
         Long id = postcardManager.createNewPostcard(postcardDTO, "123.1233.12323");
         // wait a little bit, so the async call should also be processed
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
@@ -98,24 +96,24 @@ public class PostcardManagerTest extends AbstractTransactionalJUnit4SpringContex
     }
 
 
+    // if you add client and id to application-unittest.properties, you can remove the "ignore"-annotation
     @Ignore
     @Test
     @Rollback
-    public void createNewPostcardWithImage() throws Exception{
+    public void createNewPostcardWithImage() throws Exception {
 
-            URL url = this.getClass().getResource("/images/testbildPostkarte.png");
+        URL url = this.getClass().getResource("/images/testbildPostkarte.png");
 
-            BufferedImage originalImage = ImageIO.read(new File(url.toURI()));
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            ImageIO.write( originalImage, "jpg", baos );
-            baos.flush();
-            byte[] imageInByte = baos.toByteArray();
-            baos.close();
-            SerialBlob sb = new SerialBlob(imageInByte);
-            Image img = new Image();
-            img.setFile(sb);
-            imageRepository.saveAndFlush(img);
-
+        BufferedImage originalImage = ImageIO.read(new File(url.toURI()));
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        ImageIO.write(originalImage, "png", baos);
+        baos.flush();
+        byte[] imageInByte = baos.toByteArray();
+        baos.close();
+        SerialBlob sb = new SerialBlob(imageInByte);
+        Image img = new Image();
+        img.setFile(sb);
+        imageRepository.saveAndFlush(img);
 
 
         PostcardDTO postcardDTO = new PostcardDTO(
@@ -126,7 +124,7 @@ public class PostcardManagerTest extends AbstractTransactionalJUnit4SpringContex
         Long id = postcardManager.createNewPostcard(postcardDTO, "123.1233.12323");
         // wait a little bit, so the async call should also be processed
         try {
-            TimeUnit.SECONDS.sleep(3);
+            TimeUnit.SECONDS.sleep(5);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

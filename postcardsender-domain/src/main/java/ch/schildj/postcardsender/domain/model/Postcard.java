@@ -3,6 +3,7 @@ package ch.schildj.postcardsender.domain.model;
 import ch.schildj.postcardsender.domain.converter.EnumConverters;
 import ch.schildj.postcardsender.domain.enums.PostcardState;
 import ch.schildj.postcardsender.domain.enums.TransmissionState;
+import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -13,6 +14,7 @@ import java.util.List;
  * Class postcard.
  */
 @Entity
+@DynamicUpdate
 @Table(name = "POSTCARD")
 @AttributeOverrides({
         @AttributeOverride(name = "id", column = @Column(name = Postcard.COLUMN_PREFIX + "ID", unique = true)),
@@ -75,7 +77,7 @@ public class Postcard extends AbstractAuditableIdModel implements Serializable {
     @Column(name = COLUMN_PREFIX + "SENDER_STREET", length = 50)
     private String senderStreet;
 
-    @Length(min = 0, max = 5)
+    @Length(max = 5)
     @Column(name = COLUMN_PREFIX + "SENDER_HOUSENR", length = 5)
     private String senderHousenr;
 
@@ -99,7 +101,7 @@ public class Postcard extends AbstractAuditableIdModel implements Serializable {
     @Column(name = COLUMN_PREFIX + "RECIPIENT_STREET", length = 50)
     private String recipientStreet;
 
-    @Length(min = 0, max = 5)
+    @Length(max = 5)
     @Column(name = COLUMN_PREFIX + "RECIPIENT_HOUSENR", length = 5)
     private String recipientHousenr;
 

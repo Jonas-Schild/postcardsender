@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
  * Transferobject
  * Response Message
  */
-public class RespMessageDTO {
+class RespMessageDTO {
     private MessageType type;
     private Integer code;
     private String text;

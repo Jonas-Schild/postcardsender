@@ -80,6 +80,7 @@
                              [sortType]="'multi'"
                              [externalPaging]="true"
                              [count]="collectionSize"
+                             [limit]="10"
                              (page)="setPage($event)">
 
                 <ngx-datatable-column [prop]="'id'" [flexGrow]="2" [sortable]="false" [resizeable]="false">

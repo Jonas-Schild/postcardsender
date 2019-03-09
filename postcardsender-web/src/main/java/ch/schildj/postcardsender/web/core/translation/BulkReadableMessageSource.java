@@ -6,6 +6,6 @@ import java.util.Locale;
 import java.util.Properties;
 
 
-public interface BulkReadableMessageSource extends MessageSource {
+interface BulkReadableMessageSource extends MessageSource {
     Properties getAllProperties(Locale locale);
 }

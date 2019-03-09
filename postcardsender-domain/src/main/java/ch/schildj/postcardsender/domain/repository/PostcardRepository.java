@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface PostcardRepository extends JpaRepository<Postcard, Long>, JpaSpecificationExecutor<Postcard> {
+public interface PostcardRepository extends JpaRepository<Postcard, Long>, JpaSpecificationExecutor<Postcard>, PostcardRepositoryCustom {
 
     @Query("SELECT p FROM Postcard p WHERE p.campaign.id = :campId order by p.cdate DESC")
     Page<PostcardDTO> findAllByCampaign(@Param("campId") Long campId, Pageable pageable);

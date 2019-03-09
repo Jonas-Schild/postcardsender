@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Access-Control-Allow-Origin" content="*">
     <title>PostCardSender MVP</title>
     <style>
 
@@ -140,7 +139,6 @@
             width: 100%;
             height: 100%;
             overflow: auto;
-            background-color: black;
             background-color: #888;
         }
 
@@ -283,11 +281,11 @@
                     <div id="requestDetail" style="display: none">
 
                         <fieldset>
-                            <legend for="outlineRequest">Request</legend>
+                            <label for="outlineRequest">Request</label>
                             <div id="outlineRequest"></div>
                         </fieldset>
                         <fieldset>
-                            <legend for="outlineResponse">Response</legend>
+                            <label for="outlineResponse">Response</label>
                             <div id="outlineResponse"></div>
                         </fieldset>
                         aktueller Kartenkey:
@@ -303,9 +301,6 @@
                 <button id="previewFront" class="button onlywithcard">Kartenvorschau vorne</button>
                 <button id="previewBack" class="button onlywithcard">Kartenvorschau hinten</button>
                 <button id="approve" class="button onlywithcard">Karte abschicken</button>
-                </fieldset>
-
-
             </div>
 
             <div id="loader" class="loader"></div>
@@ -748,6 +743,40 @@
         sendRequestwithOauth2Token();
     });
 
+    // add funtionality to Form "Branding Image"
+    document.getElementById('brandingImageForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('lastRequest').innerHTML = 'Branding Bild ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/branding/image';
+        currentReqMethod = 'PUT';
+
+        var form = document.getElementById('brandingImageForm');
+        var currentFormData = new FormData();
+        currentFormData.append('image', document.getElementById('brandingImage').files[0], 'image');
+
+
+        sendAsFormData = true;
+        currentReqBody = currentFormData;
+        sendRequestwithOauth2Token();
+    });
+
+    // add funtionality to Form "Stamp Form"
+    document.getElementById('stampForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+        document.getElementById('lastRequest').innerHTML = 'Briefmarken Bild ändern';
+        secondPartUrl = 'pcc/api/v1/postcards/' + cardKey + '/branding/stamp';
+        currentReqMethod = 'PUT';
+
+        var form = document.getElementById('stampForm');
+        var currentFormData = new FormData();
+        currentFormData.append('stamp', document.getElementById('stampImage').files[0], 'image');
+
+
+        sendAsFormData = true;
+        currentReqBody = currentFormData;
+        sendRequestwithOauth2Token();
+    });
+
     // ******************
     // Functions
     // *****************
@@ -776,7 +805,7 @@
             document.getElementById('branding').style.display = 'block';
             brandingVisible = true;
         }
-    };
+    }
 
 
     // display the uploaded file
@@ -785,7 +814,7 @@
             var reader = new FileReader();
             reader.onload = function (e) {
                 document.getElementById(targetElement).src = e.target.result;
-            }
+            };
             reader.readAsDataURL(input.files[0]);
         }
     }
@@ -857,7 +886,7 @@
             if (req.readyState === 4 && req.status === 200) {
                 var accesscode = JSON.parse(this.response);
                 currentToken = 'Bearer ' + accesscode.access_token;
-                console.log('Token OK')
+                console.log('Token OK');
                 // save credentials to localstorage for further use
                 saveValue(document.getElementById('identifier'));
                 saveValue(document.getElementById('secret'));
@@ -922,7 +951,7 @@
         var text = '';
         if (jsonvalue.hasOwnProperty('warnings') && jsonvalue.warnings.length > 0) {
             state = 'WARN';
-            text = 'Warnungen:'
+            text = 'Warnungen:';
             for (i in jsonvalue.warnings) {
                 text += '<br/>' + jsonvalue.warnings[i].code + '-' + jsonvalue.warnings[i].description;
             }
@@ -930,7 +959,7 @@
         } else if (jsonvalue.hasOwnProperty('errors') && jsonvalue.errors.length > 0) {
             //Request was successfull but contains errors, show warning
             state = 'NOK';
-            text = 'Fehler:'
+            text = 'Fehler:';
             for (i in jsonvalue.errors) {
                 text += '<br/>' + jsonvalue.errors[i].code + '-' + jsonvalue.errors[i].description;
             }
@@ -984,7 +1013,7 @@
         if (subResponse.length > 1000) {
             subResponse = subResponse.substring(0, 1000) + '...';
         }
-        document.getElementById('outlineResponse').innerHTML = 'HTTP-Status: ' + currentRespHTTPStatus + '<br/>' + currentResponse;
+        document.getElementById('outlineResponse').innerHTML = 'HTTP-Status: ' + currentRespHTTPStatus + '<br/>' + subResponse;
 
     }
 
@@ -1029,14 +1058,14 @@
     // When the user clicks on x, close the modal
     span.onclick = function () {
         modal.style.display = 'none';
-    }
+    };
 
     // When the user clicks anywhere outside of the modal, close it
     window.onclick = function (event) {
         if (event.target == modal) {
             modal.style.display = 'none';
         }
-    }
+    };
 
 
     //Save the value function - save it to localStorage as (ID, VALUE)

@@ -32,7 +32,8 @@
               <label for="validFrom" class="col-form-label" translate>Gültig von</label>
               <div class="input-group">
                 <input class="form-control" placeholder="dd.mm.yyyy" name="validFrom" id="validFrom"
-                       [(ngModel)]="datePickerModelValidFrom" ngbDatepicker #d1="ngbDatepicker" #validFrom="ngModel" required>
+                       [(ngModel)]="datePickerModelValidFrom" ngbDatepicker #d1="ngbDatepicker" #validFrom="ngModel"
+                       required>
                 <div *ngIf="campaignForm.submitted && !validFrom.valid" class="alert-danger">Datum benötigt</div>
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary fa fa-calendar" (click)="d1.toggle()"
@@ -46,7 +47,8 @@
               <label for="validTo" class="col-form-label" translate>Gültig bis</label>
               <div class="input-group">
                 <input class="form-control" placeholder="dd.mm.yyyy" name="validTo" id="validTo"
-                       [(ngModel)]="datePickerModelValidTo" ngbDatepicker #d2="ngbDatepicker" #validTo="ngModel" required>
+                       [(ngModel)]="datePickerModelValidTo" ngbDatepicker #d2="ngbDatepicker" #validTo="ngModel"
+                       required>
                 <div *ngIf="campaignForm.submitted && !validTo.valid" class="alert-danger">Datum benötigt</div>
                 <div class="input-group-append">
                   <button class="btn btn-outline-secondary fa fa-calendar" (click)="d2.toggle()"
@@ -253,10 +255,11 @@
               </div>
             </div>
 
-            <div *ngIf="(campaign.brandType === 'TEXT')" class="form-group">
+            <div *ngIf="(campaign.brandType === 'TEXT' || campaign.brandType === 'QR')" class="form-group">
               <div class="col-md-12">
                 <label for="brandingText" class="control-label" translate>Text</label>
-                <textarea type="text" rows="4" class="form-control" name="brandingText" id="brandingText" maxlength="250"
+                <textarea type="text" rows="4" class="form-control" name="brandingText" id="brandingText"
+                          maxlength="250"
                           [(ngModel)]="campaign.brandText"></textarea>
               </div>
             </div>

@@ -65,7 +65,7 @@ export class OverviewComponent implements OnInit {
     }, () => {
       this.prevLoading = false;
     });
-    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title'});
+    this.modalService.open(content, {ariaLabelledBy: 'modal-basic-title', size: 'lg'});
   }
 
 

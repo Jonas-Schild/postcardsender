@@ -43,6 +43,7 @@ export class ImageuploaderComponent implements OnInit {
   selectFile(event) {
     this.loading = true;
     this.fileTooBig = false;
+    this.imageChangedEvent = null;
     this.selectedFiles = event.target.files;
     if (this.selectedFiles.item(0).size > 6291456) {
       this.fileTooBig = true;
@@ -57,7 +58,7 @@ export class ImageuploaderComponent implements OnInit {
   }
 
   /**
-   * upload image and allow to crop if desired
+   * upload image
    */
   upload() {
     this.progress.percentage = 0;
@@ -79,8 +80,8 @@ export class ImageuploaderComponent implements OnInit {
 
     this.selectedFiles = undefined;
     this.imagePreview = undefined;
-    this.croppedImage = '';
-    this.imageChangedEvent = '';
+    this.croppedImage = null;
+    this.imageChangedEvent = null;
   }
 
   showPreview(imageFile) {

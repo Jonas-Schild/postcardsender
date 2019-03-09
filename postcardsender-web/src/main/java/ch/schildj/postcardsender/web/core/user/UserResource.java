@@ -8,7 +8,6 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -17,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * This class gets the logged user info of the application.
  */
-@Api(value="user", description="Current user and environment")
+@Api(value = "user", description = "Current user and environment")
 @RestController
 public class UserResource {
 

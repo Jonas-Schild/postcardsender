@@ -4,7 +4,6 @@ import ch.schildj.postcardsender.domain.converter.EnumConverters;
 import ch.schildj.postcardsender.domain.converter.LocalDateAttributeConverter;
 import ch.schildj.postcardsender.domain.enums.BrandingType;
 import ch.schildj.postcardsender.domain.enums.ImageType;
-import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import java.io.Serializable;

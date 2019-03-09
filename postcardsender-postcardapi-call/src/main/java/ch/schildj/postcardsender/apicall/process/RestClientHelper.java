@@ -19,7 +19,7 @@ import java.nio.charset.Charset;
 /*
  * Helper class to provide restTemplate
  */
-public class RestClientHelper {
+class RestClientHelper {
 
 
     /*

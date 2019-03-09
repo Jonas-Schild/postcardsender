@@ -10,10 +10,14 @@ import ch.schildj.postcardsender.domain.model.RespMessage;
 import ch.schildj.postcardsender.domain.repository.CardhistoryRepository;
 import ch.schildj.postcardsender.domain.repository.PostcardRepository;
 import ch.schildj.postcardsender.domain.repository.RespMessageRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.client.HttpStatusCodeException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +41,8 @@ public class AsyncPostcardApiCall {
     @Autowired
     private PostcardApiCallProvider postcardApiCallProvider;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(AsyncPostcardApiCall.class);
+
     /*
      * make a new api-call with a defined type of action
      *
@@ -45,21 +51,36 @@ public class AsyncPostcardApiCall {
      */
 
     @Async("threadPoolTaskExecutor")
-    @Transactional
-        public void apiCallWithCardElements(Postcard postcard, PostcardManager.CardElementType type) {
-        // reload Postcard, to have a valid session to load the blobs
-        postcard = postcardRepository.getOne(postcard.getId());
-        PostCardApiCall call = postcardApiCallProvider.getNewPostCardApiCall(PostcardApiObjectConverter.toPostcardApiDto(postcard));
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void apiCallWithCardElements(Postcard postcard, PostcardManager.CardElementType type) {
+
         if (type != PostcardManager.CardElementType.NEW) {
-            // check if card isn't allready APPROVED or doesn't exists (NOT_FOUND)
-            // if yes, create a new Card
-            String state = call.getState();
-            if (state.compareTo("APPROVED") == 0 || state.compareTo("NOT_FOUND") == 0) {
-                type = PostcardManager.CardElementType.NEW;
+            // wait a little bit, to assure that the prior creation-request is finished
+            // Could be improved by implementing a message-queue with the requests
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
             }
         }
         ArrayList<RequestLogDto> requestLogDtos = new ArrayList<>();
         try {
+            // reload Postcard
+            postcardRepository.flush();
+            // postcardRepository.refresh(postcard);
+            postcard = postcardRepository.getOne(postcard.getId());
+            PostCardApiCall call = postcardApiCallProvider.getNewPostCardApiCall(PostcardApiObjectConverter.toPostcardApiDto(postcard));
+            if (type != PostcardManager.CardElementType.NEW) {
+                if (postcard.getKey() == null) {
+                    throw new Exception("Card can't be updated, when not created");
+                }
+                // check if card isn't allready APPROVED or doesn't exists (NOT_FOUND)
+                // if yes, create a new Card
+                String state = call.getState();
+                if (state.compareTo("APPROVED") == 0 || state.compareTo("NOT_FOUND") == 0) {
+                    type = PostcardManager.CardElementType.NEW;
+                }
+            }
+
             switch (type) {
                 case NEW:
                     requestLogDtos = call.createCard();
@@ -103,7 +124,20 @@ public class AsyncPostcardApiCall {
             if (requestLogDtos.size() > 0) {
                 // save history
                 persistCardHistory(requestLogDtos, postcard);
+            } else if (e instanceof HttpStatusCodeException) {
+                HttpStatusCodeException httperr = (HttpStatusCodeException) e;
+                RequestLogDto requestLog = new RequestLogDto();
+                requestLog.setRequest(type.name());
+                requestLog.setPostcardId(postcard.getId());
+                requestLog.setPostcardKey(postcard.getKey());
+                requestLogDtos = new ArrayList<>();
+                requestLogDtos.add(requestLog);
+                requestLog.setRespHttpCode(httperr.getStatusCode().value());
+                requestLog.setRespHttpError("Failed with " + httperr.getStatusCode().getReasonPhrase());
+                // save history
+                persistCardHistory(requestLogDtos, postcard);
             }
+
             postcard.setTransmissionState(TransmissionState.ERROR);
             this.postcardRepository.saveAndFlush(postcard);
         }
@@ -124,7 +158,9 @@ public class AsyncPostcardApiCall {
                 }
             }
             cardhistoryRepository.save(cardhistory);
-            postcard.getCardhistoryList().add(cardhistory);
+            List<Cardhistory> ch = postcard.getCardhistoryList();
+            ch.add(cardhistory);
+            // postcard.setCardhistoryList(ch);
         }
     }
 

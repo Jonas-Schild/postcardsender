@@ -3,7 +3,6 @@ package ch.schildj.postcardsender.web.controller;
 
 import ch.schildj.postcardsender.domain.model.dto.*;
 import ch.schildj.postcardsender.domain.repository.CampaignRepository;
-import ch.schildj.postcardsender.domain.repository.PostcardRepository;
 import ch.schildj.postcardsender.process.CampaignManager;
 import ch.schildj.postcardsender.process.PostcardManager;
 import io.swagger.annotations.Api;
@@ -20,24 +19,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.List;
-import java.util.Properties;
 
 
 @RestController
 @RequestMapping("api/protected/campaign")
-@Api(value="campaign", description="Operations relevant on the campaign, only availabe when logged-in")
+@Api(value = "campaign", description = "Operations relevant on the campaign, only availabe when logged-in")
 public class CampaignProtectedResource {
 
-    private CampaignRepository campaignRepository;
+    private final CampaignRepository campaignRepository;
 
-    private PostcardManager postcardManager;
+    private final PostcardManager postcardManager;
 
-    private CampaignManager campaignManager;
+    private final CampaignManager campaignManager;
 
 
-    private static final int MAX_PAGE_SIZE = 50;
+    private static final int MAX_PAGE_SIZE = 10;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CampaignProtectedResource.class);
@@ -61,7 +58,6 @@ public class CampaignProtectedResource {
     @PostMapping(value = "/searchPostcards/{campId}/{page}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public DataSizeAndDataDTO<PostcardDTO> getAllPostcardsFromCampaign(@PathVariable("campId") Long campId, @PathVariable("page") int page, @RequestBody CardSearchDTO cardSearchDTO) {
-        page--;  // Pageation starts by 0 not 1
         PageRequest pageRequest = PageRequest.of(page, MAX_PAGE_SIZE, Sort.by("mdate").descending());
         Page<PostcardDTO> pageResult = this.postcardManager.findAllByCampaign(campId, pageRequest, cardSearchDTO);
         List<PostcardDTO> postcardDTOS = pageResult.getContent();
@@ -111,7 +107,7 @@ public class CampaignProtectedResource {
     @ApiOperation(value = "Remove stamp from campaign")
     @DeleteMapping(value = "/removeStamp/{campId}")
     @ResponseBody
-    public void removeStamp(@PathVariable("campId") Long campId, @PathVariable("imgId") Long imgId) {
+    public void removeStamp(@PathVariable("campId") Long campId) {
         campaignManager.deleteStamp(campId);
     }
 

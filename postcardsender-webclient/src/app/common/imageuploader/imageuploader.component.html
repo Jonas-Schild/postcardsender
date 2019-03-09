@@ -9,20 +9,17 @@
 </label>
 
 <div class="row">
-  <div *ngIf="showCrop && imageChangedEvent" class="col-md-7">
+  <div *ngIf="showCrop && imageChangedEvent" class="col-md-7 fixed-width">
     <button class="btn btn-secondary fa fa-undo" (click)="rotateLeft();  $event.preventDefault();">nach links drehen
     </button>
     <button class="btn btn-secondary fa fa-repeat" (click)="rotateRight();  $event.preventDefault();">nach rechts drehen
     </button>
 
-    <div>
+    <div class="fixed-width">
       <image-cropper
         [imageChangedEvent]="imageChangedEvent"
         [maintainAspectRatio]="true"
         [aspectRatio]="16 / 12"
-        [resizeToWidth]="1819"
-        [cropperMinWidth]="128"
-        [onlyScaleDown]="true"
         [roundCropper]="false"
         format="png"
         outputType="file"

@@ -36,8 +36,10 @@ export class CampaignCardOverviewComponent implements OnInit {
 
   public loading = false;
 
+  public PAGESIZE = 10;
+
   ngOnInit() {
-    this.page = 1;
+    this.page = 0;
 
     this.search = new CardSearch(undefined, undefined, undefined, undefined);
 
@@ -68,7 +70,7 @@ export class CampaignCardOverviewComponent implements OnInit {
       if (result) {
         this.collectionSize = result.dataSize;
         if (this.collectionSize > 0) {
-          this.maxPage = Math.ceil(this.collectionSize / 50);
+          this.maxPage = Math.ceil(this.collectionSize / this.PAGESIZE);
         } else {
           this.maxPage = 1;
         }

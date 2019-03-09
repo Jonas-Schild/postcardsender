@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface ImageRepositoryCustom {
 
-    public List<Image> getUnusedImages(LocalDateTime dateTime) ;
+    List<Image> getUnusedImages(LocalDateTime dateTime) ;
 }

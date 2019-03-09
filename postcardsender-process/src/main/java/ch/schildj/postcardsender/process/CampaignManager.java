@@ -44,7 +44,7 @@ public class CampaignManager {
      * @param campaignDTO       - the transfer object
      * @return the entity
      */
-    public Campaign toEntity(CampaignDTO campaignDTO) {
+    private Campaign toEntity(CampaignDTO campaignDTO) {
         Campaign c;
         if (campaignDTO.getId() == null) {
             c = new Campaign();

@@ -31,7 +31,7 @@ import java.sql.Blob;
 @Api(value="image", description="Operations with images")
 public class ImagePublicResource {
 
-    private ImageRepository imageRepository;
+    private final ImageRepository imageRepository;
 
     private static final Logger LOGGER = LoggerFactory.getLogger(ImagePublicResource.class);
 

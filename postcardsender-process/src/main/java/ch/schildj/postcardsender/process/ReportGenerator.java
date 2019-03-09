@@ -13,7 +13,7 @@ import java.util.List;
  * Generates Report
  */
 
-public class ReportGenerator {
+class ReportGenerator {
 
     private static final int MDATE_CELL_INDEX = 0;
     private static final int STATE_CELL_INDEX = 1;
@@ -33,13 +33,13 @@ public class ReportGenerator {
     private static final int RECIPIENT_ZIP_CELL_INDEX = 15;
     private static final int RECIPIENT_CITY_CELL_INDEX = 16;
 
-    private List<Postcard> postcardList;
+    private final List<Postcard> postcardList;
 
     private int rowIndex = 0;
 
     private XSSFSheet sheet;
 
-    static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
+    private static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
 
     /*
      * Constructor
@@ -108,7 +108,7 @@ public class ReportGenerator {
     }
 
     /* resize colums */
-    void resizeColumns() {
+    private void resizeColumns() {
         for (int i = 0; i < 17; i++) {
             sheet.autoSizeColumn(i);
         }

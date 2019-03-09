@@ -26,7 +26,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class AbstractAuditableIdModel {
-    protected static final String COLUMN_PREFIX = "TCH_";
+    private static final String COLUMN_PREFIX = "TCH_";
 
 
     @Column(name = COLUMN_PREFIX + "MDATE", nullable = false)
@@ -39,7 +39,7 @@ public abstract class AbstractAuditableIdModel {
     @Convert(converter = LocalDateTimeAttributeConverter.class)
     private LocalDateTime cdate;
 
-    protected AbstractAuditableIdModel() {
+    AbstractAuditableIdModel() {
     }
 
 

@@ -1,7 +1,7 @@
 <div class="card shadow">
   <div class="card-body">
     <div class="col-md-12" *ngIf="creationStep === 1">
-      <h2>Bitte Bild auf der Vorderseite der Postkarte wählen</h2>
+      <h4>Bitte Bild auf der Vorderseite der Postkarte wählen</h4>
       <div *ngIf="!!campaign && campaign.imgType === 'PREDEFINED'">
         <app-imagepicker [images]="images" (selectedImage)="selectImage($event)"></app-imagepicker>
       </div>
@@ -10,12 +10,12 @@
       </div>
     </div>
     <div class="col-md-12" *ngIf="creationStep === 2">
-      <h2>Grusstext eingeben</h2>
+      <h4>Grusstext eingeben</h4>
       <form name="form" (ngSubmit)="f.form.valid && updateText()" #f="ngForm" accept-charset="ISO-8859-1">
         <div class="form-group">
           <!-- <label for="text">Text</label> -->
           <textarea type="text" rows="8" class="form-control" id="text" name="text" [(ngModel)]="postcard.text"
-                    #text="ngModel" required></textarea>
+                    #text="ngModel" maxlength="900" required></textarea>
           <div *ngIf="f.submitted && !text.valid" class="alert-danger">Postkartentext muss eingegeben werden</div>
         </div>
         <div class="form-group">
@@ -32,7 +32,7 @@
                    (save)="updateSender($event)"></app-address>
     </div>
     <div class="col-md-12" *ngIf="creationStep === 5">
-      <h2>Bestätigen</h2>
+      <h4>Bestätigen</h4>
       <app-overview (approve)="approvePostcard()" (callStep)="callStepFromOverview($event)"></app-overview>
       <button *ngIf="calledFromCampaign" class="btn btn-default" (click)="backToCampaign()">Zurück zur Postkartenliste
       </button>

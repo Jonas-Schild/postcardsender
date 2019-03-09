@@ -1,5 +1,7 @@
 package ch.schildj.postcardsender.domain.model;
 
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.List;
@@ -9,6 +11,7 @@ import java.util.List;
  * Holds the requests for every Postcard
  */
 @Entity
+@DynamicUpdate
 @Table(name = "CARDHISTORY")
 @AttributeOverrides({
         @AttributeOverride(name = "id", column = @Column(name = Cardhistory.COLUMN_PREFIX + "ID", unique = true)),

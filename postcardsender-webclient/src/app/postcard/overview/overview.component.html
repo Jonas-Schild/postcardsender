@@ -13,7 +13,7 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-outline-secondary float-right" (click)="openModal(preview, 'front')"
+    <button class="btn btn-outline-secondary btn-sm float-right" (click)="openModal(preview, 'front')"
             [disabled]="!postcard.id">Vorschau Vorderseite
     </button>
   </div>
@@ -87,7 +87,7 @@
     </div>
   </div>
   <div class="card-footer">
-    <button class="btn btn-outline-secondary float-right" (click)="openModal(preview, 'back')"
+    <button class="btn btn-outline-secondary btn-sm float-right" (click)="openModal(preview, 'back')"
             [disabled]="!postcard.id">Vorschau Rückseite
     </button>
   </div>
@@ -112,7 +112,7 @@
       <span class="sr-only">Loading...</span>
     </div>
     <div *ngIf="!prevLoading">
-      <img *ngIf="prevImg" [src]="'data:image/jpeg;base64,' + prevImg">
+      <img class="imagebordered" *ngIf="prevImg" [src]="'data:image/jpeg;base64,' + prevImg">
       <div *ngIf="!prevImg" translate>Vorschau kann leider nicht aufgerufen werden. Bitte versuchen Sie es in 10
         Sekunden noch einmal
       </div>

@@ -60,7 +60,7 @@ public class CleanUpTest extends AbstractTransactionalJUnit4SpringContextTests {
         this.campaign.setDesc("Testkampagne");
         this.campaign.setImgType(ImageType.PREDEFINED);
         this.campaign.setMaxCards(1000);
-        this.campaign.setValidFrom(LocalDate.of(2019, 01, 01));
+        this.campaign.setValidFrom(LocalDate.of(2019, 1, 1));
         this.campaign.setValidTo(LocalDate.of(2022, 12, 31));
         this.campaign.setBrandText("Merci");
         this.campaign.setBrandType(BrandingType.TEXT);

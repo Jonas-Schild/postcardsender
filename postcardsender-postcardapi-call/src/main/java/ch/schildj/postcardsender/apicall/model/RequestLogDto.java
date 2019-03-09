@@ -4,7 +4,6 @@ import ch.schildj.postcardsender.apicall.model.apiResponseDto.CodeMessage;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
 /*
  * Transferobject between the apicall-component and the process-component

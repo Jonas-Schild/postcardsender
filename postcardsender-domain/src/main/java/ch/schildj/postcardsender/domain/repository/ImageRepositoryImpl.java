@@ -13,6 +13,7 @@ public class ImageRepositoryImpl implements ImageRepositoryCustom {
     @PersistenceContext
     private EntityManager em;
 
+    @SuppressWarnings("JpaQueryApiInspection")
     @Override
     public List<Image> getUnusedImages(LocalDateTime dateTime) {
         List<Image> images = em.createNamedQuery("getUnusedImages", Image.class)

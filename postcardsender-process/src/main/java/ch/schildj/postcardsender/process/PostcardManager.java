@@ -24,13 +24,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.List;
 
 /**
@@ -68,7 +66,7 @@ public class PostcardManager {
      * @param postcardDTO       - the transfer object
      * @return the entity
      */
-    public Postcard toEntity(PostcardDTO postcardDTO) {
+    private Postcard toEntity(PostcardDTO postcardDTO) {
         Postcard p;
         if (postcardDTO.getId() == null) {
             p = new Postcard();
@@ -107,7 +105,7 @@ public class PostcardManager {
      * @param ipAddressCaller   - the ip address of the creator
      * @return the id of the created postcard
      */
-    @Transactional
+    // @Transactional
     public Long createNewPostcard(PostcardDTO postcardDTO, String ipAddressCaller) throws MaxLimitReachedException {
         Postcard newPostcard = this.toEntity(postcardDTO);
         if (isLimitReached(ipAddressCaller, newPostcard.getCampaign())) {
@@ -138,7 +136,7 @@ public class PostcardManager {
      * @param id       - the postcard-id
      * @param id       - the new text
      */
-    @Transactional
+    // @Transactional
     public void updateText(Long id, String text) {
         Postcard updPostcard = postcardRepository.getOne(id);
 
@@ -156,7 +154,7 @@ public class PostcardManager {
      *
      * @param id       - the postcard-id
      */
-    @Transactional
+    // @Transactional
     public void approve(Long id) {
         Postcard updPostcard = postcardRepository.getOne(id);
 
@@ -176,7 +174,7 @@ public class PostcardManager {
      * @param adr      - the new address
      */
 
-    @Transactional
+    // @Transactional
     public void updateSender(Long id, AddressDTO adr) {
         Postcard updPostcard = postcardRepository.getOne(id);
 
@@ -202,7 +200,7 @@ public class PostcardManager {
      * @param adr      - the new address
      */
 
-    @Transactional
+    // @Transactional
     public void updateRecipient(Long id, AddressDTO adr) {
         Postcard updPostcard = postcardRepository.getOne(id);
 
@@ -228,7 +226,7 @@ public class PostcardManager {
      * @param imageId  - the id of the new image
      */
 
-    @Transactional
+    // @Transactional
     public void updateFrontimage(Long id, Long imageId) {
         Postcard updPostcard = postcardRepository.getOne(id);
 
@@ -263,7 +261,7 @@ public class PostcardManager {
      * @param postcard    - the postcard to be updated
      * @return true if allowed, false if not
      */
-    private boolean isUpdateAllowed(Postcard postcard) {
+    private Boolean isUpdateAllowed(Postcard postcard) {
         // update is only allowed when the state is open or if the User is logged-in
         if (postcard.getStatus().equals(PostcardState.OPEN)) {
             return true;
@@ -337,32 +335,32 @@ public class PostcardManager {
      * @param ip         - the ip-address to check
      * @param campaign   - the campaign the postcard belongs to
      */
-     private boolean isLimitReached(String ip, Campaign campaign) {
+    private boolean isLimitReached(String ip, Campaign campaign) {
 
-         Integer limit = campaign.getMaxCards();
+        Integer limit = campaign.getMaxCards();
 
 
-         if (limit != null) {
+        if (limit != null) {
 
-             LocalTime midnight = LocalTime.MIDNIGHT;
-             LocalDate today = LocalDate.now();
-             LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
-             // get all cards with the same IP between today 00:00 until now
-             Specification<Postcard> spec = PostcardSpec.isFromCampaign(campaign.getId()).and(PostcardSpec.hasIpAddress(ip)).and(PostcardSpec.isDateAfter(todayMidnight).and(PostcardSpec.isDateBefore(LocalDateTime.now())));
+            LocalTime midnight = LocalTime.MIDNIGHT;
+            LocalDate today = LocalDate.now();
+            LocalDateTime todayMidnight = LocalDateTime.of(today, midnight);
+            // get all cards with the same IP between today 00:00 until now
+            Specification<Postcard> spec = PostcardSpec.isFromCampaign(campaign.getId()).and(PostcardSpec.hasIpAddress(ip)).and(PostcardSpec.isDateAfter(todayMidnight).and(PostcardSpec.isDateBefore(LocalDateTime.now())));
 
-             List<Postcard> result = postcardRepository.findAll(
-                     Specification.where(spec)
-             );
+            List<Postcard> result = postcardRepository.findAll(
+                    Specification.where(spec)
+            );
 
-             LOGGER.info(ip + "has sent Postcards " + result.size());
+            LOGGER.info(ip + "has sent Postcards " + result.size());
 
-             if (result != null && result.size() >= limit) {
-                 return true;
-             }
+            if (result.size() >= limit) {
+                return true;
+            }
 
-         }
+        }
 
-         return false;
-     }
+        return false;
+    }
 
 }

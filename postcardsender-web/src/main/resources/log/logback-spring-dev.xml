@@ -131,7 +131,7 @@
 
     <logger name="com.github.ziplet" level="WARN"/>
 
-    <logger name="com.zaxxer.hikari.pool.HikariPool" level="INFO"/>
+    <logger name="com.zaxxer.hikari.pool" level="INFO"/>
 
     <logger name="springfox" level="INFO"/>
 

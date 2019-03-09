@@ -51,12 +51,12 @@ public class PostCardApiCall {
     private final String PROXY_URL;
     private final Integer PROXY_PORT;
 
-    private TokenProvider tokenProvider;
+    private final TokenProvider tokenProvider;
 
     private RequestLogDto requestLog;
     private ArrayList<RequestLogDto> requestLogDtos;
     private PostcardApiDto postcard;
-    private String campaignKey;
+    private final String campaignKey;
 
 
     public enum PostcardSide {
@@ -323,7 +323,7 @@ public class PostCardApiCall {
 
 
         DefaultResponse response = this.putImageWithDefaultResponse(this.prepareUrl(this.EXTEND_IMAGE),
-                this.postcard.getFrontImage());
+                this.postcard.getFrontImage(), "image");
 
         if (response != null) {
             this.readDefaultResponse(response);
@@ -342,7 +342,7 @@ public class PostCardApiCall {
      */
     public ArrayList<RequestLogDto> updateBrandingImage() throws Exception {
         DefaultResponse response = this.putImageWithDefaultResponse(this.prepareUrl(this.EXTEND_BRANDINGIMAGE),
-                this.postcard.getBrandImage());
+                this.postcard.getBrandImage(), "image");
         if (response != null) {
             this.readDefaultResponse(response);
         }
@@ -353,9 +353,9 @@ public class PostCardApiCall {
      * Uploads a logo as stamp in the given postcard.
      * @return the log of the communication
      */
-    public ArrayList<RequestLogDto> updateStamp() throws Exception {
+    private ArrayList<RequestLogDto> updateStamp() throws Exception {
         DefaultResponse response = this.putImageWithDefaultResponse(this.prepareUrl(this.EXTEND_STAMP),
-                this.postcard.getStampImage());
+                this.postcard.getStampImage(), "stamp");
         if (response != null) {
             this.readDefaultResponse(response);
         }
@@ -500,12 +500,13 @@ public class PostCardApiCall {
      *
      * @param  url           - HTTP-Method to be called
      * @param  image         - Bytes to transmit
+     * @param  key           - image or stamp
      * @return the answer from the API
      */
-    private DefaultResponse putImageWithDefaultResponse(String url, byte[] image) {
+    private DefaultResponse putImageWithDefaultResponse(String url, byte[] image, String key) {
         try {
             // log the Request
-            requestLog.setRequest("PUT " + url + " (image)");
+            requestLog.setRequest("PUT " + url + " (" + key + ")");
 
             HttpHeaders headers = new HttpHeaders();
             headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
@@ -524,8 +525,8 @@ public class PostCardApiCall {
 
             fileHeader.setContentType(MediaType.IMAGE_PNG);
 
-            fileHeader.add(HttpHeaders.CONTENT_DISPOSITION, "form-data; name=\"image\"; filename=\"image.png\"");
-            map.add("image", new HttpEntity<>(image, fileHeader));
+            fileHeader.add(HttpHeaders.CONTENT_DISPOSITION, "form-data; name=\""+key+"\"; filename=\"image.png\"");
+            map.add(key , new HttpEntity<>(image, fileHeader));
 
 
             HttpEntity<MultiValueMap<String, Object>> httpEntity = new HttpEntity<>(map, headers);
@@ -562,7 +563,7 @@ public class PostCardApiCall {
         String currentToken = this.tokenProvider.getNewToken();
         headers.set("Authorization", "Bearer " + currentToken);
         headers.setContentType(MediaType.APPLICATION_JSON);
-        RestTemplate restTemplate = null;
+        RestTemplate restTemplate;
         try {
             restTemplate = RestClientHelper.getRestClientSSL(null, null,
                     PROXY_URL, PROXY_PORT, PROXY_USER, PROXY_PASSWORD);

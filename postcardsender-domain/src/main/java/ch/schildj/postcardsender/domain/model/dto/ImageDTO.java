@@ -8,8 +8,8 @@ import java.sql.Blob;
  * Transferobject
  * Image
  */
-public class ImageDTO {
-    private Blob file;
+class ImageDTO {
+    private final Blob file;
 
     public ImageDTO(Blob file) {
         this.file = file;

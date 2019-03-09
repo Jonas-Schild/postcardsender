@@ -27,8 +27,8 @@ import java.util.List;
 @Api(value="campaign", description="Operations relevant on the campaign, open")
 public class CampaignPublicResource {
 
-    private CampaignRepository campaignRepository;
-    private CampImageSetRepository campImageSetRepository;
+    private final CampaignRepository campaignRepository;
+    private final CampImageSetRepository campImageSetRepository;
 
 
     private static final Logger LOGGER = LoggerFactory.getLogger(CampaignPublicResource.class);

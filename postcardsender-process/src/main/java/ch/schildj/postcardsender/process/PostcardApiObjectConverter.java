@@ -22,7 +22,7 @@ import java.util.List;
  * This class is to convert objects from the process component to objects from the apicall component or the other way
  */
 
-public class PostcardApiObjectConverter {
+class PostcardApiObjectConverter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(PostcardApiObjectConverter.class);
 

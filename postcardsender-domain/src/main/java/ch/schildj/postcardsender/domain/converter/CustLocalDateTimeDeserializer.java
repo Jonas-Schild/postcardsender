@@ -14,12 +14,10 @@ public class CustLocalDateTimeDeserializer extends JsonDeserializer<LocalDateTim
     @Override
     public LocalDateTime deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
         ObjectCodec oc = p.getCodec();
-        TextNode node = (TextNode) oc.readTree(p);
+        TextNode node = oc.readTree(p);
         String dateString = node.textValue();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm:ss");
-        LocalDateTime value = LocalDateTime.parse(dateString, formatter);
-        return value;
-
+        return (LocalDateTime.parse(dateString, formatter));
 
     }
 

@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
 /**
  * OAuth2 Token Provider
  */
-public class TokenProvider {
+class TokenProvider {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TokenProvider.class);
 

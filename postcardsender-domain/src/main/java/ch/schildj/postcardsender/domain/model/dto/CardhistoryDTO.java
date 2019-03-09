@@ -34,7 +34,7 @@ public class CardhistoryDTO {
         this.requestDate = cardhistory.getCreation();
 
         if (cardhistory.getRespMessageList() != null) {
-            this.respMessageDTOS = this.createDtoList(cardhistory.getRespMessageList());
+            this.respMessageDTOS = createDtoList(cardhistory.getRespMessageList());
         }
     }
 
@@ -46,12 +46,12 @@ public class CardhistoryDTO {
         this.requestDate = requestDate;
 
         if (respMessages != null) {
-            this.respMessageDTOS = this.createDtoList(respMessages);
+            this.respMessageDTOS = createDtoList(respMessages);
         }
     }
 
 
-    public static List<RespMessageDTO> createDtoList(List<RespMessage> respMessages) {
+    private static List<RespMessageDTO> createDtoList(List<RespMessage> respMessages) {
 
         List<RespMessageDTO> dtoList = new ArrayList<RespMessageDTO>();
 
