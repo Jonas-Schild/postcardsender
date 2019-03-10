@@ -3,11 +3,11 @@
 - [Goal](#goal)
 - [Postcard-API explorer](#postcard-api-explorer)
 - [PostCardSender](#postcardsender)
-- [Build and start postcardsender](#build-and-start-postcardsender)
-- [Configure settings](#configure-settings)
-- [Start client on separate port for testing an debugging Angular](#start-client-on-separate-port-for-testing-an-debugging-angular)
-- [Create our own webclient](#create-our-own-webclient)
-- [Used tools and frameworks](#used-tools-and-frameworks)
+  - [Build and start postcardsender](#build-and-start-postcardsender)
+  - [Configure settings](#configure-settings)
+  - [Start client on separate port for testing an debugging Angular](#start-client-on-separate-port-for-testing-an-debugging-angular)
+  - [Create our own webclient](#create-our-own-webclient)
+  - [Used tools and frameworks](#used-tools-and-frameworks)
 
 ------------------------------------
 # Goal
