@@ -6,6 +6,7 @@
 - [Configure settings](#configure-settings)
 - [Start client on separate port for testing an debugging Angular](#start-client-on-separate-port-for-testing-an-debugging-angular)
 - [Create our own webclient](#create-our-own-webclient)
+- [Used tools and frameworks](#used-tools-and-frameworks)
 
 ------------------------------------
 ## Goal
@@ -79,3 +80,20 @@ If you want to implement your own web-client, please run the application and loo
 [Swagger Gui at http://localhost:8080/postcardsender-web/swagger-ui.html](http://localhost:8080/postcardsender-web/swagger-ui.html) to get futher information about the backends REST API.
 
 Please make sure to copy your webclient to /META-INF/resources/webjars/ at build-time.
+
+
+## Used tools and frameworks
+
+This project uses:
+     
+**Build & packagemanagement**
+- Maven 3
+- NodeJs 10 & NPM 6
+
+**Backend (Java 8)**
+- Spring Boot 2
+
+**Frontend**
+- Angular 7
+- Angular CLI 7
+- Bootstrap 3
