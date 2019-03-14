@@ -1,1 +1,0 @@
-web: java $JAVA_OPTS -jar postcardsender.jar --p $PORT
