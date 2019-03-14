@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar postcardsender-web/target/*.jar --p $PORT
+web: java $JAVA_OPTS -jar postcardsender.jar --p $PORT
