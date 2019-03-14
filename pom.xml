@@ -46,8 +46,8 @@
             <artifactId>spring-boot-starter-data-ldap</artifactId>
         </dependency>
         <!--<dependency>-->
-            <!--<groupId>org.springframework.boot</groupId>-->
-            <!--<artifactId>spring-boot-starter-quartz</artifactId>-->
+        <!--<groupId>org.springframework.boot</groupId>-->
+        <!--<artifactId>spring-boot-starter-quartz</artifactId>-->
         <!--</dependency>-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -222,21 +222,21 @@
         </plugins>
     </build>
     <profiles>
-    <profile>
-        <id>dev</id>
-        <activation>
-            <activeByDefault>true</activeByDefault>
-        </activation>
-        <properties>
-            <environment>dev</environment>
+        <profile>
+            <id>dev</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <environment>dev</environment>
 
-            <spring.profiles.active>security-form</spring.profiles.active>
+                <spring.profiles.active>security-form</spring.profiles.active>
 
-            <skip.tests>false</skip.tests>
-            <skip.it>false</skip.it>
-            <node.build.arguments>build</node.build.arguments>
-        </properties>
-    </profile>
+                <skip.tests>false</skip.tests>
+                <skip.it>false</skip.it>
+                <node.build.arguments>build</node.build.arguments>
+            </properties>
+        </profile>
     </profiles>
 
     <properties>
