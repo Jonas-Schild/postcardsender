@@ -336,6 +336,11 @@
                                 </div>
                                 <br/>
                                 <div class="pair">
+                                    <label for="senderCompany">Firma:</label>
+                                    <input name="company" id="senderCompany" class="addressfield">
+                                </div>
+                                <br/>
+                                <div class="pair">
                                     <label for="senderStreet">Strasse:</label>
                                     <input name="street" id="senderStreet" class="addressfield">
                                 </div>
@@ -404,6 +409,16 @@
                                     <input name="poBox" id="recipientPObox" class="addressfield">
                                 </div>
                                 <br/>
+								<div class="pair">
+                                    <label for="recipientCountry">Land (optional):</label>
+                                    <input name="country" id="recipientCountry" class="addressfield">
+                                </div>
+                                <br/>
+								<div class="pair">
+                                    <label for="recipientAddAdrInfo">Zusatzzeile Adresse:</label>
+                                    <input name="additionalAdrInfo" id="recipientAddAdrInfo" class="addressfield">
+                                </div>
+                                <br/>
                                 <input type="submit" value="Update >>" class="button onlywithcard"/>
                             </form>
                         </fieldset>
@@ -424,7 +439,7 @@
                                 <input name="image" id="frontImage" type="file" accept=".png, .jpg"
                                        onchange="readURL(this,'frontImageUp');">
                                 <br/>
-                                <img id="frontImageUp" src="https://via.placeholder.com/180?text=dein+Frontbild"
+                                <img id="frontImageUp" src=""
                                      alt="dein Frontbild" class="img-small">
                                 <br/>
                                 <input type="submit" value="Update >>" class="button onlywithcard"/>
@@ -445,7 +460,7 @@
                                     <input name="stampImage" id="stampImage" type="file" accept=".png, .jpg"
                                            onchange="readURL(this,'stampImageUp');">
                                     <br/>
-                                    <img id="stampImageUp" src="https://via.placeholder.com/180?text=deine+Briefmarke"
+                                    <img id="stampImageUp" src=""
                                          alt="dein Briefmarkenbild" class="img-small"/>
                                     <br/>
                                     <input type="submit" value="Update >>" class="button onlywithcard"/>
@@ -482,7 +497,7 @@
                                                    onchange="readURL(this,'brandingImageUp');">
                                             <br/>
                                             <img id="brandingImageUp"
-                                                 src="https://via.placeholder.com/180?text=Brandingbild"
+                                                 src=""
                                                  alt="dein Brandingbild" class="img-small">
                                             <br/>
                                             <input type="submit" value="Update >>" class="button onlywithcard"/>
